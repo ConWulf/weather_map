@@ -105,15 +105,14 @@ $(document).ready(function() {
         for (const tab of tabs) {
             $(tab).addClass('bg-gray-200');
             $(tab).removeClass('bg-gray-600');
+        }
 
-            // tab.removeClass("active");
-        }
-        console.log($(this).attr('id'));
         for (const content of tabContent) {
-            $(content).addClass("hidden");
+            if($(content).hasClass(($(this).attr('id')))) {
+                $(content).removeClass("hidden");
+            }
         }
-        
-        // $(this).addClass("active");
+
         $(this).removeClass('bg-gray-200');
         $(this).addClass('bg-gray-600');
     }

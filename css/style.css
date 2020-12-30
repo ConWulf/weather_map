@@ -45,10 +45,6 @@
     top: 9px;
 }
 
-.content {
-    @apply hidden
-}
-
 .tabs {
     @apply mt-14 overflow-hidden bg-transparent border-b border-gray-900
 }
