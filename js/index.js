@@ -1,6 +1,11 @@
 
 $(document).ready(function() {
+
+    const html = $('html');
+    const slider = $('#toggle');
     const overviewCard = $("#current");
+    const tabContent = $(".content");
+    const tabs = $(".links");
     const mapOptions = {
         container: 'map',
         center: [-98.49, 29.42], // starting position [lng, lat]
@@ -8,8 +13,23 @@ $(document).ready(function() {
         minZoom: 2,
         style: 'mapbox://styles/mapbox/satellite-streets-v11'
     }
+
     mapboxgl.accessToken = mapboxKey;
     const map = new mapboxgl.Map(mapOptions);
+
+    const geocodeOptions = {
+        accessToken: mapboxKey,
+        mapboxgl: mapboxgl,
+        marker: false,
+        collapsed: true
+    }
+
+    const geocoder = new MapboxGeocoder(geocodeOptions);
+    document.getElementById("geocoder").appendChild(geocoder.onAdd(map));
+
+    const marker = new mapboxgl.Marker()
+        .setLngLat([-98.49, 29.42])
+        .addTo(map);
 
     const convertTime = (unix) => {
         let milliseconds = unix * 1000;
@@ -33,8 +53,9 @@ $(document).ready(function() {
             sunrise,
             sunset
         }} = weatherObj;
-        return `<div class="relative p-3 w-full rounded-lg bg-white mx-auto bg-opacity-20 max-w-2xl text-sm">
+        return `<div id="currentCard" class="relative p-3 w-full rounded-lg bg-gray-800 mx-auto bg-opacity-20 max-w-2xl text-sm dark:text-gray-100">
         <div class="flex flex-col">
+        <a href="#" class="p-1">LOCATION</a>
         <h3>as of ${convertTime(dt)}</h3>
             <div>
                 <p class="right-0 top-0 absolute"><img src="http://openweathermap.org/img/wn/${icon}@2x.png" alt="weather icon" class="w-20"></p>
@@ -59,5 +80,44 @@ $(document).ready(function() {
         console.log(data);
         overviewCard.append(renderCurrentWeather(data));
     });
+
+    slider.on('click', function() {
+        const card = $("#currentCard");
+        const sliderCheck = $('#toggle:checked');
+        console.log(sliderCheck.length);
+        if (sliderCheck.length === 1) {
+            html.addClass("dark");
+            card.addClass("bg-gray-100");
+            card.removeClass("bg-gray-800");
+        } else {
+          html.removeClass("dark");
+            card.removeClass("bg-gray-100");
+            card.addClass("bg-gray-800");
+        }
+
+    });
+
+    function showTabContent () {
+        for (const content of tabContent) {
+            $(content).addClass("hidden");
+        }
+
+        for (const tab of tabs) {
+            $(tab).addClass('bg-gray-200');
+            $(tab).removeClass('bg-gray-600');
+
+            // tab.removeClass("active");
+        }
+        console.log($(this).attr('id'));
+        for (const content of tabContent) {
+            $(content).addClass("hidden");
+        }
+        
+        // $(this).addClass("active");
+        $(this).removeClass('bg-gray-200');
+        $(this).addClass('bg-gray-600');
+    }
+
+    tabs.on('click', showTabContent)
 
 });

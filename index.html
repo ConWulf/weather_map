@@ -6,29 +6,113 @@
 		  content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
 	<meta http-equiv="X-UA-Compatible" content="ie=edge">
 	<link href='https://api.mapbox.com/mapbox-gl-js/v2.0.0/mapbox-gl.css' rel='stylesheet' />
+	<link rel='stylesheet' href='https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-geocoder/v4.2.0/mapbox-gl-geocoder.css' type='text/css' />
 	<link rel="stylesheet" href="build/style.css">
 	<title>Weather map</title>
 </head>
 <body class="w-screen h-screen">
 
-<nav class="h-10 w-full dark:bg-gray-800 dark:text-white">
-	<div class="flex items-center justify-between h-full max-w-3xl mx-auto">
-		<a href="#" class="p-1 font-bold text-lg"><i class="fas fa-feather-alt pr-2 text-sm"></i>WEATHER</a>
-		<a href="#" class="p-1">LOCATION</a>
-	</div>
+		<nav class="h-10 w-full bg-yellow-100 dark:bg-gray-800 dark:text-white">
+			<div class="flex items-center justify-between h-full max-w-3xl mx-auto">
+				<a href="#" class="p-1 font-bold text-lg"><i class="fas fa-feather-alt pr-2 text-sm"></i>WEATHER</a>
+			</div>
+		</nav>
 
-</nav>
+		<main class="relative bg-gradient-to-tr from-blue-600 via-indigo-400 to-blue-500 dark:bg-gradient-to-tr dark:from-purple-900 dark:via-purple-800 dark:to-gray-900">
+			<div id="current" class="mx-2 mb-2 pt-2"></div>
 
-<main class="w-full h-full bg-gradient-to-tr from-blue-600 via-indigo-400 to-green-500">
-	<div id="current" class="mx-2 mb-2 pt-2"></div>
+			<div id='map' class="w-full h-64"></div>
+			<div id="geocoder" class="geocoder"></div>
 
-	<div id='map' class="w-full h-52"></div>
-</main>
+		<!--tabs-->
+			<div class="tabs" id="tab">
+				<button id="five" class="links bg-gray-200">5 day</button>
+				<button id="eight" class="links bg-gray-200">8 day</button>
+				<button id="hour" class="links bg-gray-200">hourly</button>
+			</div>
 
-<footer class="w-full h-12 bg-yellow-100 dark:bg-gray-800 dark:text-white">
-</footer>
+		<!--content-->
+			<div class="h-36 pb-3">
+				<div id="fiveDay" class="content five">
+					<div>day1</div>
+					<div>day2</div>
+					<div>day3</div>
+					<div>day4</div>
+					<div>day5</div>
+				</div>
+				<div id="eightDay" class="content eight">
+					<div>day1</div>
+					<div>day2</div>
+					<div>day3</div>
+					<div>day4</div>
+					<div>day5</div>
+					<div>day6</div>
+					<div>day7</div>
+					<div>day8</div>
+				</div>
+				<div id="hourly" class="content hour">
+					<div>1</div>
+					<div>1</div>
+					<div>1</div>
+					<div>1</div>
+					<div>1</div>
+					<div>1</div>
+					<div>1</div>
+					<div>1</div>
+					<div>1</div>
+					<div>1</div>
+					<div>1</div>
+					<div>1</div>
+					<div>1</div>
+					<div>1</div>
+					<div>1</div>
+					<div>1</div>
+					<div>1</div>
+					<div>1</div>
+					<div>1</div>
+					<div>1</div>
+					<div>1</div>
+					<div>1</div>
+					<div>1</div>
+					<div>1</div>
+					<div>1</div>
+					<div>1</div>
+					<div>1</div>
+					<div>1</div>
+					<div>1</div>
+					<div>1</div>
+					<div>1</div>
+					<div>1</div>
+					<div>1</div>
+					<div>1</div>
+					<div>1</div>
+					<div>1</div>
+					<div>1</div>
+					<div>1</div>
+					<div>1</div>
+					<div>1</div>
+					<div>1</div>
+					<div>1</div>
+					<div>1</div>
+					<div>1</div>
+					<div>1</div>
+					<div>1</div>
+					<div>1</div>
+					<div>1</div>
+				</div>
+			</div>
+	</main>
+
+	<footer class=" w-full h-12 bg-yellow-100 dark:bg-gray-800 dark:text-white">
+		<div class="text-right pr-2 pt-1">
+			<input type="checkbox" id="toggle" class="checkbox"/>
+			<label for="toggle" class="switch"></label>
+		</div>
+	</footer>
+
 
 <script src='https://api.mapbox.com/mapbox-gl-js/v2.0.0/mapbox-gl.js'></script>
+<script src='https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-geocoder/v4.2.0/mapbox-gl-geocoder.min.js'></script>
 <script src="https://kit.fontawesome.com/6e57a86385.js" crossorigin="anonymous"></script>
 <script src="https://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
 <script src="js/keys.js"></script>

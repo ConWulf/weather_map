@@ -2,4 +2,63 @@
 
 @tailwind componenets;
 
+.checkbox {
+    @apply hidden
+}
+
+.checkbox:checked + .switch::after {
+    left: 1.15rem;
+}
+
+.checkbox:checked + .switch {
+    @apply bg-indigo-300
+}
+
+.switch {
+    @apply relative inline-block w-8 h-4 bg-gray-900 rounded-full
+}
+
+.switch::after {
+    content: "";
+    position: absolute;
+    width: .75rem;
+    height: .75rem;
+    border-radius: 50%;
+    background-color: white;
+    top: .1rem;
+    left: .1rem;
+}
+
+.geocoder {
+    position: absolute;
+    z-index: 1;
+    width: 50%;
+    margin: 5px 5px;
+}
+
+.mapboxgl-ctrl-geocoder--input {
+    padding: 0 3rem;
+    height: 40px;
+}
+
+.mapboxgl-ctrl-geocoder--icon-search {
+    top: 9px;
+}
+
+.content {
+    @apply hidden
+}
+
+.tabs {
+    @apply mt-14 overflow-hidden bg-transparent border-b border-gray-900
+}
+
+.tabs button {
+    @apply float-left border border-gray-900 outline-none cursor-pointer transition duration-100 px-4 py-1 rounded-t-xl
+}
+
+.tabs button:nth-child(2) {
+    @apply mx-1
+}
+
 @tailwind utilities;
