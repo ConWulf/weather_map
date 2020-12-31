@@ -6,6 +6,7 @@ $(document).ready(function() {
     const overviewCard = $("#current");
     const tabContent = $(".content");
     const tabs = $(".links");
+    const navbar = $("#nav");
     const mapOptions = {
         container: 'map',
         center: [-98.49, 29.42], // starting position [lng, lat]
@@ -53,7 +54,7 @@ $(document).ready(function() {
             sunrise,
             sunset
         }} = weatherObj;
-        return `<div id="currentCard" class="relative p-3 w-full rounded-lg bg-gray-800 mx-auto bg-opacity-20 max-w-2xl text-sm dark:text-gray-100">
+        return `<div id="currentCard" class="relative p-3 w-full rounded-lg bg-white mx-auto bg-opacity-60 max-w-2xl text-sm">
         <div class="flex flex-col">
         <a href="#" class="p-1">LOCATION</a>
         <h3>as of ${convertTime(dt)}</h3>
@@ -84,16 +85,24 @@ $(document).ready(function() {
     slider.on('click', function() {
         const card = $("#currentCard");
         const sliderCheck = $('#toggle:checked');
-        console.log(sliderCheck.length);
         if (sliderCheck.length === 1) {
             html.addClass("dark");
-            card.addClass("bg-gray-100");
-            card.removeClass("bg-gray-800");
+            card.addClass("bg-opacity-30");
+            card.removeClass("bg-opacity-60");
+            navbar.addClass('bg-opacity-20')
+            for (const tab of tabs) {
+                $(tab).addClass('bg-opacity-20')
+            }
         } else {
-          html.removeClass("dark");
-            card.removeClass("bg-gray-100");
-            card.addClass("bg-gray-800");
+            html.removeClass("dark");
+            card.removeClass("bg-opacity-30");
+            card.addClass("bg-opacity-60");
+            navbar.removeClass('bg-opacity-20')
+            for (const tab of tabs) {
+                $(tab).removeClass('bg-opacity-20')
+            }
         }
+
 
     });
 
@@ -104,7 +113,7 @@ $(document).ready(function() {
 
         for (const tab of tabs) {
             $(tab).addClass('bg-gray-200');
-            $(tab).removeClass('bg-gray-600');
+            $(tab).removeClass('bg-gray-500');
         }
 
         for (const content of tabContent) {
@@ -114,7 +123,7 @@ $(document).ready(function() {
         }
 
         $(this).removeClass('bg-gray-200');
-        $(this).addClass('bg-gray-600');
+        $(this).addClass('bg-gray-500');
     }
 
     tabs.on('click', showTabContent)

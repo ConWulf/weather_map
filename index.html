@@ -12,13 +12,13 @@
 </head>
 <body class="w-screen h-screen">
 
-		<nav class="h-10 w-full bg-yellow-100 dark:bg-gray-800 dark:text-white">
-			<div class="flex items-center justify-between h-full max-w-3xl mx-auto">
+		<div id="nav" class="h-10 w-full bg-white bg-opacity-10">
+			<div class="flex items-center justify-between h-full max-w-3xl mx-auto bg-transparent">
 				<a href="#" class="p-1 font-bold text-lg"><i class="fas fa-feather-alt pr-2 text-sm"></i>WEATHER</a>
 			</div>
-		</nav>
+		</div>
 
-		<main class="relative bg-gradient-to-tr from-blue-600 via-indigo-400 to-blue-500 dark:bg-gradient-to-tr dark:from-purple-900 dark:via-purple-800 dark:to-gray-900">
+		<main class="bg-blue-600 dark:bg-gray-800 dark:text-gray-100">
 			<div id="current" class="mx-2 mb-2 pt-2"></div>
 
 			<div id='map' class="w-full h-64"></div>
@@ -26,13 +26,13 @@
 
 		<!--tabs-->
 			<div class="tabs" id="tab">
-				<button id="five" class="links bg-gray-200">5 day</button>
-				<button id="eight" class="links bg-gray-200">8 day</button>
-				<button id="hour" class="links bg-gray-200">hourly</button>
+				<button id="five" class="links bg-gray-200 ">5 day</button>
+				<button id="eight" class="links bg-gray-200 ">8 day</button>
+				<button id="hour" class="links bg-gray-200 ">hourly</button>
 			</div>
 
 		<!--content-->
-			<div class="h-40 pb-3 overflow-auto">
+			<div class="h-56 pb-3 overflow-auto">
 				<div id="fiveDay" class="content five hidden">
 					<div>day1</div>
 					<div>day2</div>
@@ -103,7 +103,7 @@
 			</div>
 	</main>
 
-	<footer class=" w-full h-12 bg-yellow-100 dark:bg-gray-800 dark:text-white">
+	<footer class=" w-full h-12 bg-yellow-100 dark:bg-white dark:bg-opacity-20 dark:text-gray-100">
 		<div class="text-right pr-2 pt-1">
 			<input type="checkbox" id="toggle" class="checkbox"/>
 			<label for="toggle" class="switch"></label>
