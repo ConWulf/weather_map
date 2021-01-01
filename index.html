@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="en" class="w-screen h-screen">
+<html lang="en" class="w-screen h-screen overflow-x-hidden">
 <head>
 	<meta charset="UTF-8">
 	<meta name="viewport"
@@ -10,100 +10,97 @@
 	<link rel="stylesheet" href="build/style.css">
 	<title>Weather map</title>
 </head>
-<body class="w-screen h-screen">
-	<div class="bg-blue-600 dark:bg-gray-800 dark:text-gray-100 overflow-x-hidden">
+<body class="w-screen h-screen overflow-x-hidden">
+	<div class=" bg-blue-600 dark:bg-gray-800 dark:text-gray-100 main-content">
 
-			<nav id="nav" class="h-10 w-full bg-white bg-opacity-40 dark:text-gray-100">
-				<div class="flex items-center justify-between h-full max-w-3xl mx-auto">
-					<a href="#" class="p-1 font-bold text-lg"><i class="fas fa-feather-alt pr-2 text-sm"></i>WEATHER</a>
+		<nav id="nav" class="h-10 w-full bg-white bg-opacity-40 dark:text-gray-100">
+			<div class="flex items-center justify-between h-full max-w-3xl mx-auto">
+				<a href="#" class="p-1 font-bold text-lg"><i class="fas fa-feather-alt pr-2 text-sm"></i>WEATHER</a>
+			</div>
+		</nav>
+
+		<div id="current" class=" mx-2 mb-2 pt-2"></div>
+
+		<div class="relative">
+			<div id='map' class="w-full h-64"></div>
+
+			<div id="geocoder" class="geocoder"></div>
+		</div>
+		<!--tabs-->
+
+			<div class="tabs" id="tab">
+				<button id="five" class="links bg-gray-200 ">5 day</button>
+				<button id="eight" class="links bg-gray-200 ">8 day</button>
+				<button id="hour" class="links bg-gray-200 ">hourly</button>
+			</div>
+
+<!--			content-->
+			<div class="w-full h-72 overflow-auto tab-content-wrapper flex flex-cols items-center justify-center pb-2">
+				<div id="fiveDay" class="content five hidden inline-block"></div>
+				<div id="eightDay" class="content eight hidden inline-block">
+					<div>day1</div>
+					<div>day2</div>
+					<div>day3</div>
+					<div>day4</div>
+					<div>day5</div>
+					<div>day6</div>
+					<div>day7</div>
+					<div>day8</div>
 				</div>
-			</nav>
-
-				<div id="current" class=" mx-2 mb-2 pt-2 w-full"></div>
-
-				<div id='map' class="w-full h-64"></div>
-				<div id="geocoder" class="geocoder"></div>
-
-			<!--tabs-->
-				<div class="tabs" id="tab">
-					<button id="five" class="links bg-gray-200 ">5 day</button>
-					<button id="eight" class="links bg-gray-200 ">8 day</button>
-					<button id="hour" class="links bg-gray-200 ">hourly</button>
+				<div id="hourly" class="content hour hidden inline-block">
+					<div>1</div>
+					<div>1</div>
+					<div>1</div>
+					<div>1</div>
+					<div>1</div>
+					<div>1</div>
+					<div>1</div>
+					<div>1</div>
+					<div>1</div>
+					<div>1</div>
+					<div>1</div>
+					<div>1</div>
+					<div>1</div>
+					<div>1</div>
+					<div>1</div>
+					<div>1</div>
+					<div>1</div>
+					<div>1</div>
+					<div>1</div>
+					<div>1</div>
+					<div>1</div>
+					<div>1</div>
+					<div>1</div>
+					<div>1</div>
+					<div>1</div>
+					<div>1</div>
+					<div>1</div>
+					<div>1</div>
+					<div>1</div>
+					<div>1</div>
+					<div>1</div>
+					<div>1</div>
+					<div>1</div>
+					<div>1</div>
+					<div>1</div>
+					<div>1</div>
+					<div>1</div>
+					<div>1</div>
+					<div>1</div>
+					<div>1</div>
+					<div>1</div>
+					<div>1</div>
+					<div>1</div>
+					<div>1</div>
+					<div>1</div>
+					<div>1</div>
+					<div>1</div>
+					<div>1</div>
 				</div>
+			</div>
+<!--		end tabs-->
 
-			<!--content-->
-				<div class="h-80 pb-3 inline-block tab-content-wrapper">
-					<div id="fiveDay" class="content five hidden">
-						<div>day1</div>
-						<div>day2</div>
-						<div>day3</div>
-						<div>day4</div>
-						<div>day5</div>
-					</div>
-					<div id="eightDay" class="content eight hidden">
-						<div>day1</div>
-						<div>day2</div>
-						<div>day3</div>
-						<div>day4</div>
-						<div>day5</div>
-						<div>day6</div>
-						<div>day7</div>
-						<div>day8</div>
-					</div>
-					<div id="hourly" class="content hour hidden">
-						<div>1</div>
-						<div>1</div>
-						<div>1</div>
-						<div>1</div>
-						<div>1</div>
-						<div>1</div>
-						<div>1</div>
-						<div>1</div>
-						<div>1</div>
-						<div>1</div>
-						<div>1</div>
-						<div>1</div>
-						<div>1</div>
-						<div>1</div>
-						<div>1</div>
-						<div>1</div>
-						<div>1</div>
-						<div>1</div>
-						<div>1</div>
-						<div>1</div>
-						<div>1</div>
-						<div>1</div>
-						<div>1</div>
-						<div>1</div>
-						<div>1</div>
-						<div>1</div>
-						<div>1</div>
-						<div>1</div>
-						<div>1</div>
-						<div>1</div>
-						<div>1</div>
-						<div>1</div>
-						<div>1</div>
-						<div>1</div>
-						<div>1</div>
-						<div>1</div>
-						<div>1</div>
-						<div>1</div>
-						<div>1</div>
-						<div>1</div>
-						<div>1</div>
-						<div>1</div>
-						<div>1</div>
-						<div>1</div>
-						<div>1</div>
-						<div>1</div>
-						<div>1</div>
-						<div>1</div>
-					</div>
-				</div>
-
-
-		<footer id="footer" class=" w-full h-14 bg-white bg-opacity-40 dark:text-gray-300">
+		<footer id="footer" class=" bottom-0 w-full h-14 bg-white bg-opacity-40 dark:text-gray-300">
 			<div class="text-center pt-1">
 				<input type="checkbox" id="toggle" class="checkbox"/>
 				<label for="toggle" class="switch"></label>
