@@ -15,22 +15,22 @@ $(document).ready(function() {
         style: 'mapbox://styles/mapbox/satellite-streets-v11'
     }
 
-    mapboxgl.accessToken = mapboxKey;
-    const map = new mapboxgl.Map(mapOptions);
-
-    const geocodeOptions = {
-        accessToken: mapboxKey,
-        mapboxgl: mapboxgl,
-        marker: false,
-        collapsed: true
-    }
-
-    const geocoder = new MapboxGeocoder(geocodeOptions);
-    document.getElementById("geocoder").appendChild(geocoder.onAdd(map));
-
-    const marker = new mapboxgl.Marker()
-        .setLngLat([-98.49, 29.42])
-        .addTo(map);
+    // mapboxgl.accessToken = mapboxKey;
+    // const map = new mapboxgl.Map(mapOptions);
+    //
+    // const geocodeOptions = {
+    //     accessToken: mapboxKey,
+    //     mapboxgl: mapboxgl,
+    //     marker: false,
+    //     collapsed: true
+    // }
+    //
+    // const geocoder = new MapboxGeocoder(geocodeOptions);
+    // document.getElementById("geocoder").appendChild(geocoder.onAdd(map));
+    //
+    // const marker = new mapboxgl.Marker()
+    //     .setLngLat([-98.49, 29.42])
+    //     .addTo(map);
 
     const convertTime = (unix) => {
         let milliseconds = unix * 1000;
@@ -54,7 +54,7 @@ $(document).ready(function() {
             sunrise,
             sunset
         }} = weatherObj;
-        return `<div id="currentCard" class="relative p-3 w-full rounded-lg bg-white mx-auto bg-opacity-60 max-w-2xl text-sm">
+        return `<div id="currentCard" class="relative p-3 rounded-lg bg-white mx-auto bg-opacity-60 max-w-2xl text-sm">
         <div class="flex flex-col">
         <a href="#" class="p-1">LOCATION</a>
         <h3>as of ${convertTime(dt)}</h3>
@@ -89,7 +89,6 @@ $(document).ready(function() {
             html.addClass("dark");
             card.addClass("bg-opacity-30");
             card.removeClass("bg-opacity-60");
-            navbar.addClass('bg-opacity-20')
             for (const tab of tabs) {
                 $(tab).addClass('bg-opacity-20')
             }
@@ -97,7 +96,6 @@ $(document).ready(function() {
             html.removeClass("dark");
             card.removeClass("bg-opacity-30");
             card.addClass("bg-opacity-60");
-            navbar.removeClass('bg-opacity-20')
             for (const tab of tabs) {
                 $(tab).removeClass('bg-opacity-20')
             }

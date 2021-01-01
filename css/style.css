@@ -33,7 +33,7 @@
     position: absolute;
     z-index: 1;
     width: 50%;
-    margin: 5px 5px;
+    margin: 5px;
 }
 
 .mapboxgl-ctrl-geocoder--input {
@@ -50,11 +50,12 @@
 }
 
 .tabs button {
-    @apply float-left border border-gray-900 outline-none cursor-pointer transition duration-100 px-4 py-1 rounded-t-3xl
-}
+    @apply float-left border border-gray-900 outline-none cursor-pointer transition duration-100 px-4 py-1 rounded-t-3xl inline-bloc
 
 .tabs button:nth-child(2) {
     @apply mx-1
 }
+
+
 
 @tailwind utilities;

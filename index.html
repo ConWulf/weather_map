@@ -11,105 +11,105 @@
 	<title>Weather map</title>
 </head>
 <body class="w-screen h-screen">
+	<div class="bg-blue-600 dark:bg-gray-800 dark:text-gray-100 overflow-x-hidden">
 
-		<div id="nav" class="h-10 w-full bg-white bg-opacity-10">
-			<div class="flex items-center justify-between h-full max-w-3xl mx-auto bg-transparent">
-				<a href="#" class="p-1 font-bold text-lg"><i class="fas fa-feather-alt pr-2 text-sm"></i>WEATHER</a>
-			</div>
-		</div>
-
-		<main class="bg-blue-600 dark:bg-gray-800 dark:text-gray-100">
-			<div id="current" class="mx-2 mb-2 pt-2"></div>
-
-			<div id='map' class="w-full h-64"></div>
-			<div id="geocoder" class="geocoder"></div>
-
-		<!--tabs-->
-			<div class="tabs" id="tab">
-				<button id="five" class="links bg-gray-200 ">5 day</button>
-				<button id="eight" class="links bg-gray-200 ">8 day</button>
-				<button id="hour" class="links bg-gray-200 ">hourly</button>
-			</div>
-
-		<!--content-->
-			<div class="h-56 pb-3 overflow-auto">
-				<div id="fiveDay" class="content five hidden">
-					<div>day1</div>
-					<div>day2</div>
-					<div>day3</div>
-					<div>day4</div>
-					<div>day5</div>
+			<nav id="nav" class="h-10 w-full bg-white bg-opacity-40 dark:text-gray-100">
+				<div class="flex items-center justify-between h-full max-w-3xl mx-auto">
+					<a href="#" class="p-1 font-bold text-lg"><i class="fas fa-feather-alt pr-2 text-sm"></i>WEATHER</a>
 				</div>
-				<div id="eightDay" class="content eight hidden">
-					<div>day1</div>
-					<div>day2</div>
-					<div>day3</div>
-					<div>day4</div>
-					<div>day5</div>
-					<div>day6</div>
-					<div>day7</div>
-					<div>day8</div>
+			</nav>
+
+				<div id="current" class=" mx-2 mb-2 pt-2 w-full"></div>
+
+				<div id='map' class="w-full h-64"></div>
+				<div id="geocoder" class="geocoder"></div>
+
+			<!--tabs-->
+				<div class="tabs" id="tab">
+					<button id="five" class="links bg-gray-200 ">5 day</button>
+					<button id="eight" class="links bg-gray-200 ">8 day</button>
+					<button id="hour" class="links bg-gray-200 ">hourly</button>
 				</div>
-				<div id="hourly" class="content hour hidden">
-					<div>1</div>
-					<div>1</div>
-					<div>1</div>
-					<div>1</div>
-					<div>1</div>
-					<div>1</div>
-					<div>1</div>
-					<div>1</div>
-					<div>1</div>
-					<div>1</div>
-					<div>1</div>
-					<div>1</div>
-					<div>1</div>
-					<div>1</div>
-					<div>1</div>
-					<div>1</div>
-					<div>1</div>
-					<div>1</div>
-					<div>1</div>
-					<div>1</div>
-					<div>1</div>
-					<div>1</div>
-					<div>1</div>
-					<div>1</div>
-					<div>1</div>
-					<div>1</div>
-					<div>1</div>
-					<div>1</div>
-					<div>1</div>
-					<div>1</div>
-					<div>1</div>
-					<div>1</div>
-					<div>1</div>
-					<div>1</div>
-					<div>1</div>
-					<div>1</div>
-					<div>1</div>
-					<div>1</div>
-					<div>1</div>
-					<div>1</div>
-					<div>1</div>
-					<div>1</div>
-					<div>1</div>
-					<div>1</div>
-					<div>1</div>
-					<div>1</div>
-					<div>1</div>
-					<div>1</div>
+
+			<!--content-->
+				<div class="h-80 pb-3 inline-block tab-content-wrapper">
+					<div id="fiveDay" class="content five hidden">
+						<div>day1</div>
+						<div>day2</div>
+						<div>day3</div>
+						<div>day4</div>
+						<div>day5</div>
+					</div>
+					<div id="eightDay" class="content eight hidden">
+						<div>day1</div>
+						<div>day2</div>
+						<div>day3</div>
+						<div>day4</div>
+						<div>day5</div>
+						<div>day6</div>
+						<div>day7</div>
+						<div>day8</div>
+					</div>
+					<div id="hourly" class="content hour hidden">
+						<div>1</div>
+						<div>1</div>
+						<div>1</div>
+						<div>1</div>
+						<div>1</div>
+						<div>1</div>
+						<div>1</div>
+						<div>1</div>
+						<div>1</div>
+						<div>1</div>
+						<div>1</div>
+						<div>1</div>
+						<div>1</div>
+						<div>1</div>
+						<div>1</div>
+						<div>1</div>
+						<div>1</div>
+						<div>1</div>
+						<div>1</div>
+						<div>1</div>
+						<div>1</div>
+						<div>1</div>
+						<div>1</div>
+						<div>1</div>
+						<div>1</div>
+						<div>1</div>
+						<div>1</div>
+						<div>1</div>
+						<div>1</div>
+						<div>1</div>
+						<div>1</div>
+						<div>1</div>
+						<div>1</div>
+						<div>1</div>
+						<div>1</div>
+						<div>1</div>
+						<div>1</div>
+						<div>1</div>
+						<div>1</div>
+						<div>1</div>
+						<div>1</div>
+						<div>1</div>
+						<div>1</div>
+						<div>1</div>
+						<div>1</div>
+						<div>1</div>
+						<div>1</div>
+						<div>1</div>
+					</div>
 				</div>
+
+
+		<footer id="footer" class=" w-full h-14 bg-white bg-opacity-40 dark:text-gray-300">
+			<div class="text-center pt-1">
+				<input type="checkbox" id="toggle" class="checkbox"/>
+				<label for="toggle" class="switch"></label>
 			</div>
-	</main>
-
-	<footer class=" w-full h-12 bg-yellow-100 dark:bg-white dark:bg-opacity-20 dark:text-gray-100">
-		<div class="text-right pr-2 pt-1">
-			<input type="checkbox" id="toggle" class="checkbox"/>
-			<label for="toggle" class="switch"></label>
-		</div>
-	</footer>
-
+		</footer>
+	</div>
 
 <script src='https://api.mapbox.com/mapbox-gl-js/v2.0.0/mapbox-gl.js'></script>
 <script src='https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-geocoder/v4.2.0/mapbox-gl-geocoder.min.js'></script>
