@@ -7,6 +7,8 @@ $(document).ready(function() {
     const tabContent = $(".content");
     const tabs = $(".links");
     const fiveDay = $("#fiveDay");
+    const sevenDay = $("#sevenDay");
+    const hourly = $("#hourly");
     const mapOptions = {
         container: 'map',
         center: [-98.49, 29.42], // starting position [lng, lat]
@@ -81,7 +83,7 @@ $(document).ready(function() {
 
     const renderFiveDay = (weatherObj) => {
         let html = ''
-        weatherObj.daily.forEach(obj => {
+        weatherObj.daily.forEach((obj, i) => {
             const {dt,
                 temp: { max, min},
                 weather: [{description, icon}],
@@ -90,21 +92,72 @@ $(document).ready(function() {
                 uvi,
                 humidity
             } = obj;
-            html += `<div>
-                        <span>${convertDate(dt)}</span>
-                        <span>${max}/${min}</span>
-                        <span><img src="http://openweathermap.org/img/wn/${icon}@2x.png" alt="weather icon"></span>
+            if (i > 0 && i <= 5) {
+                html += `<div class="relative my-2 p-2 w-72 sm:mx-2 flex flex-col sm:ring-2 sm:ring-blue-400">
+                        <span class="self-center">${convertDate(dt)}</span>
+                        <span>${max}/${min} <img class=" w-16 absolute right-0 top-0" src="http://openweathermap.org/img/wn/${icon}.png" alt="weather icon"></span>
                         <span>${description}</span>
                         <span>${humidity}</span>
                         <span>${uvi}</span>
                         <span>${wind_speed}</span>
                         <span>${wind_deg}</span>
                     </div>`
+            }
         })
         return html;
     }
 
+    const renderSevenDay = (weatherObj) => {
+        let html = ''
+        weatherObj.daily.forEach((obj, i) => {
+            const {dt,
+                temp: { max, min},
+                weather: [{description, icon}],
+                wind_deg,
+                wind_speed,
+                uvi,
+                humidity
+            } = obj;
+            if (i > 0) {
+                html += `<div class="relative my-2 p-2 w-72 sm:mx-2 flex flex-col sm:ring-2 sm:ring-blue-400">
+                        <span class="self-center">${convertDate(dt)}</span>
+                        <span>${max}/${min} <img class=" w-16 absolute right-0 top-0" src="http://openweathermap.org/img/wn/${icon}.png" alt="weather icon"></span>
+                        <span>${description}</span>
+                        <span>${humidity}</span>
+                        <span>${uvi}</span>
+                        <span>${wind_speed}</span>
+                        <span>${wind_deg}</span>
+                    </div>`
+            }
+        })
+        return html;
+    }
 
+    const renderHourly = (weatherObj) => {
+        let html = ''
+        weatherObj.hourly.forEach((obj, i) => {
+            const {dt,
+                temp,
+                weather: [{description, icon}],
+                wind_deg,
+                wind_speed,
+                uvi,
+                humidity
+            } = obj;
+            if (i > 0) {
+                html += `<div class="relative my-2 p-2 w-72 sm:mx-2 flex flex-col sm:ring-2 sm:ring-blue-400">
+                        <span class="self-center">${basicTime(dt)}</span>
+                        <span>${temp} <img class=" w-16 absolute right-0 top-0" src="http://openweathermap.org/img/wn/${icon}.png" alt="weather icon"></span>
+                        <span>${description}</span>
+                        <span>${humidity}</span>
+                        <span>${uvi}</span>
+                        <span>${wind_speed}</span>
+                        <span>${wind_deg}</span>
+                    </div>`
+            }
+        })
+        return html;
+    }
 
     const getWeather = (lat, long) => {
         return fetch(`https://api.openweathermap.org/data/2.5/onecall?lat=${lat}&lon=${long}&appid=${weatherKey}&units=imperial`)
@@ -114,7 +167,9 @@ $(document).ready(function() {
     getWeather(29.42, -98.49).then(data => {
         console.log(data);
         overviewCard.append(renderCurrentWeather(data));
-        fiveDay.append(renderFiveDay(data))
+        fiveDay.append(renderFiveDay(data));
+        sevenDay.append(renderSevenDay(data));
+        hourly.append(renderHourly(data));
     });
 
     slider.on('click', function() {
