@@ -13,7 +13,7 @@ $(document).ready(function() {
         container: 'map',
         center: [-98.49, 29.42], // starting position [lng, lat]
         zoom: 9, // starting zoom
-        minZoom: 2,
+        minZoom: 1,
         style: 'mapbox://styles/mapbox/satellite-streets-v11'
     }
 
@@ -30,7 +30,7 @@ $(document).ready(function() {
     const geocoder = new MapboxGeocoder(geocodeOptions);
     document.getElementById("geocoder").appendChild(geocoder.onAdd(map));
 
-    const marker = new mapboxgl.Marker()
+    const marker = new mapboxgl.Marker({draggable: true})
         .setLngLat([-98.49, 29.42])
         .addTo(map);
 
@@ -55,7 +55,7 @@ $(document).ready(function() {
         return dateObj.toLocaleString("en-US", options);
     }
 
-    const renderCurrentWeather = (weatherObj) => {
+    const renderCurrentWeather = (weatherObj, location) => {
         let {current: {temp,
             feels_like,
             weather: [{description, icon}],
@@ -65,7 +65,7 @@ $(document).ready(function() {
         }} = weatherObj;
         return `<div id="currentCard" class="relative p-3 rounded-lg bg-white mx-auto bg-opacity-60 max-w-2xl text-sm">
         <div class="flex flex-col">
-        <h3 href="#" class="text-lg">Weather Today In Location</h3>
+        <h3 href="#" class="text-lg" id="location">${location}</h3>
         <h3>as of ${convertTime(dt)}</h3>
             <div>
                 <p class="right-0 top-0 absolute"><img src="http://openweathermap.org/img/wn/${icon}@2x.png" alt="weather icon" class="w-20"></p>
@@ -159,18 +159,35 @@ $(document).ready(function() {
         return html;
     }
 
-    const getWeather = (lat, long) => {
+    const getWeather = (long, lat) => {
         return fetch(`https://api.openweathermap.org/data/2.5/onecall?lat=${lat}&lon=${long}&appid=${weatherKey}&units=imperial`)
             .then(res => res.json());
     }
 
-    getWeather(29.42, -98.49).then(data => {
-        console.log(data);
-        overviewCard.append(renderCurrentWeather(data));
-        fiveDay.append(renderFiveDay(data));
-        sevenDay.append(renderSevenDay(data));
-        hourly.append(renderHourly(data));
-    });
+    const init = (lng, lat) => {
+        getWeather(lng, lat).then(weatherData => {
+            console.log(weatherData);
+            fiveDay.html(renderFiveDay(weatherData));
+            sevenDay.html(renderSevenDay(weatherData));
+            hourly.html(renderHourly(weatherData));
+            geocode(lng, lat).then(locationData => {
+                overviewCard.html(renderCurrentWeather(weatherData, locationData));
+            })
+        });
+    }
+    init(-98.49, 29.42)
+
+    function geocode(long, lat) {
+       return fetch (`https://api.mapbox.com/geocoding/v5/mapbox.places/${long},        ${lat}.json?access_token=${mapboxKey}`)
+           .then(res => res.json())
+           .then(data => data.features[3].place_name.slice(0, data.features[3].place_name.indexOf(',')))
+    }
+
+    marker.on('dragend', function() {
+        const lng = marker.getLngLat().lng;
+        const lat = marker.getLngLat().lat;
+        init(lng, lat);
+    })
 
     slider.on('click', function() {
         const card = $("#currentCard");
@@ -214,6 +231,6 @@ $(document).ready(function() {
         $(this).addClass('bg-gray-500');
     }
 
-    tabs.on('click', showTabContent)
+    tabs.on('click', showTabContent);
 
 });
