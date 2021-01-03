@@ -9,7 +9,7 @@ $(document).ready(function() {
     const fiveDay = $("#fiveDay");
     const sevenDay = $("#sevenDay");
     const hourly = $("#hourly");
-    let clicked = false;
+    let clicked = true;
     const mapOptions = {
         container: 'map',
         center: [-98.49, 29.42], // starting position [lng, lat]
@@ -260,24 +260,29 @@ $(document).ready(function() {
 
     tabs.on('click', showTabContent);
 
-    fiveDay.on('click', '.drop_down', function(e) {
-        e.preventDefault();
-        Array.from(fiveDay.children()).forEach((elem) => {
-            if($(elem).children().hasClass($(this).attr('id'))) {
-                $(elem).children().removeClass('extra_info');
-            }
-        })
-        fiveDay.on('click', '.drop_down', function() {
-            Array.from(fiveDay.children()).forEach((elem) => {
-                for (const [i, el] of Array.from($(elem).children()).entries()) {
-                    if (i > 1 && $(elem).children().hasClass($(this).attr('id'))) {
-                        console.log(el);
-                        $(el).addClass('extra_info');
+
+        fiveDay.on('click', '.drop_down', function(e) {
+            e.preventDefault();
+            clicked = !clicked;
+            if (!clicked) {
+                Array.from(fiveDay.children()).forEach((elem) => {
+                    if ($(elem).children().hasClass($(this).attr('id'))) {
+                        $(elem).children().removeClass('extra_info');
                     }
-                }
-            });
+                });
+            } else {
+                Array.from(fiveDay.children()).forEach((elem) => {
+                    for (const [i, el] of Array.from($(elem).children()).entries()) {
+                        if (i > 1 && $(elem).children().hasClass($(this).attr('id'))) {
+                            console.log(el);
+                            $(el).addClass('extra_info');
+                        }
+                    }
+                });
+            }
         });
-    });
+
+
 
 
 });
