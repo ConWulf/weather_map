@@ -9,6 +9,7 @@ $(document).ready(function() {
     const fiveDay = $("#fiveDay");
     const sevenDay = $("#sevenDay");
     const hourly = $("#hourly");
+    let clicked = false;
     const mapOptions = {
         container: 'map',
         center: [-98.49, 29.42], // starting position [lng, lat]
@@ -44,7 +45,7 @@ $(document).ready(function() {
     const convertDate = (unix) => {
         let milliseconds = unix * 1000;
         let dateObj = new Date(milliseconds);
-        let options = {weekday: "long", month: "long", day: "numeric"}
+        let options = {weekday: "long", day: "numeric"}
         return dateObj.toLocaleString("en-US", options);
     }
 
@@ -52,6 +53,13 @@ $(document).ready(function() {
         let milliseconds = unix * 1000;
         let dateObj = new Date(milliseconds);
         let options = {hour: "numeric", minute: "numeric"}
+        return dateObj.toLocaleString("en-US", options);
+    }
+
+    const id = (unix) => {
+        let milliseconds = unix * 1000;
+        let dateObj = new Date(milliseconds);
+        let options = {day: "numeric"}
         return dateObj.toLocaleString("en-US", options);
     }
 
@@ -93,14 +101,22 @@ $(document).ready(function() {
                 humidity
             } = obj;
             if (i > 0 && i <= 5) {
-                html += `<div class="relative my-2 p-2 w-72 sm:mx-2 flex flex-col sm:ring-2 sm:ring-blue-400">
-                        <span class="self-center">${convertDate(dt)}</span>
-                        <span>${max}/${min} <img class=" w-16 absolute right-0 top-0" src="http://openweathermap.org/img/wn/${icon}.png" alt="weather icon"></span>
-                        <span>${description}</span>
-                        <span>${humidity}</span>
-                        <span>${uvi}</span>
-                        <span>${wind_speed}</span>
-                        <span>${wind_deg}</span>
+                html += `<div class="five_day relative p-2 w-72 sm:m-2 flex flex-col sm:ring-2 sm:ring-blue-400">
+<!--                        <span class="self-center"></span>-->
+                        <div class="text-sm">
+                           <span class="mr-3">${convertDate(dt)}</span>
+                            <span>${max}/${min}</span>
+                            <img class=" w-10 absolute right-12 top-0" src="http://openweathermap.org/img/wn/${icon}.png" alt="weather icon">
+                            <button id="${id(dt)}" class="drop_down absolute right-2 top-3 focus:outline-none focus:ring rounded-full w-3 h-3 flex items-center justify-center">
+                                <i class="fas fa-caret-down "></i>
+                            </button>
+                            
+                        </div>
+                        <span class="${id(dt)}">${description}</span>
+                        <span class="extra_info ${id(dt)}">${humidity}</span>
+                        <span class="extra_info ${id(dt)}">${uvi}</span>
+                        <span class="extra_info ${id(dt)}">${wind_speed}</span>
+                        <span class="extra_info ${id(dt)}">${wind_deg}</span>
                     </div>`
             }
         })
@@ -121,7 +137,10 @@ $(document).ready(function() {
             if (i > 0) {
                 html += `<div class="relative my-2 p-2 w-72 sm:mx-2 flex flex-col sm:ring-2 sm:ring-blue-400">
                         <span class="self-center">${convertDate(dt)}</span>
-                        <span>${max}/${min} <img class=" w-16 absolute right-0 top-0" src="http://openweathermap.org/img/wn/${icon}.png" alt="weather icon"></span>
+                        <span>${max}/${min} 
+                            <img class=" w-16 absolute right-0 top-0" src="http://openweathermap.org/img/wn/${icon}.png" alt="weather icon">
+                            <i class="fas fa-caret-down"></i>
+                        </span>
                         <span>${description}</span>
                         <span>${humidity}</span>
                         <span>${uvi}</span>
@@ -147,7 +166,10 @@ $(document).ready(function() {
             if (i > 0) {
                 html += `<div class="relative my-2 p-2 w-72 sm:mx-2 flex flex-col sm:ring-2 sm:ring-blue-400">
                         <span class="self-center">${basicTime(dt)}</span>
-                        <span>${temp} <img class=" w-16 absolute right-0 top-0" src="http://openweathermap.org/img/wn/${icon}.png" alt="weather icon"></span>
+                        <span>${temp} 
+                            <img class=" w-16 absolute right-0 top-0" src="http://openweathermap.org/img/wn/${icon}.png" alt="weather icon">
+                            <i class="fas fa-caret-down"></i>
+                        </span>
                         <span>${description}</span>
                         <span>${humidity}</span>
                         <span>${uvi}</span>
@@ -191,11 +213,14 @@ $(document).ready(function() {
 
     slider.on('click', function() {
         const card = $("#currentCard");
+        const fiveDay = $('#fiveDay');
         const sliderCheck = $('#toggle:checked');
         if (sliderCheck.length === 1) {
             html.addClass("dark");
             card.addClass("bg-opacity-30");
             card.removeClass("bg-opacity-60");
+            fiveDay.addClass('bg-opacity-20');
+            fiveDay.removeClass('bg-opacity-60');
             for (const tab of tabs) {
                 $(tab).addClass('bg-opacity-20')
             }
@@ -203,6 +228,8 @@ $(document).ready(function() {
             html.removeClass("dark");
             card.removeClass("bg-opacity-30");
             card.addClass("bg-opacity-60");
+            fiveDay.removeClass('bg-opacity-20');
+            fiveDay.addClass('bg-opacity-60');
             for (const tab of tabs) {
                 $(tab).removeClass('bg-opacity-20')
             }
@@ -232,5 +259,25 @@ $(document).ready(function() {
     }
 
     tabs.on('click', showTabContent);
+
+    fiveDay.on('click', '.drop_down', function(e) {
+        e.preventDefault();
+        Array.from(fiveDay.children()).forEach((elem) => {
+            if($(elem).children().hasClass($(this).attr('id'))) {
+                $(elem).children().removeClass('extra_info');
+            }
+        })
+        fiveDay.on('click', '.drop_down', function() {
+            Array.from(fiveDay.children()).forEach((elem) => {
+                for (const [i, el] of Array.from($(elem).children()).entries()) {
+                    if (i > 1 && $(elem).children().hasClass($(this).attr('id'))) {
+                        console.log(el);
+                        $(el).addClass('extra_info');
+                    }
+                }
+            });
+        });
+    });
+
 
 });

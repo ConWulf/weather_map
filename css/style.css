@@ -62,4 +62,8 @@
     -ms-overflow-style: none;
 }
 
+.extra_info {
+    @apply hidden
+}
+
 @tailwind utilities;
