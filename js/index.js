@@ -101,22 +101,23 @@ $(document).ready(function() {
                 humidity
             } = obj;
             if (i > 0 && i <= 5) {
-                html += `<div class="five_day relative p-2 w-72 sm:m-2 flex flex-col sm:ring-2 sm:ring-blue-400">
+                html += `<div class="five_day relative p-2 w-72 sm:m-2 flex flex-col sm:ring-2 sm:ring-blue-400 collapse ${id(dt)}">
 <!--                        <span class="self-center"></span>-->
                         <div class="text-sm">
                            <span class="mr-3">${convertDate(dt)}</span>
                             <span>${max}/${min}</span>
                             <img class=" w-10 absolute right-12 top-0" src="http://openweathermap.org/img/wn/${icon}.png" alt="weather icon">
-                            <button id="${id(dt)}" class="drop_down absolute right-2 top-3 focus:outline-none focus:ring rounded-full w-3 h-3 flex items-center justify-center">
-                                <i class="fas fa-caret-down "></i>
-                            </button>
-                            
+                            <button id="${id(dt)}" class="drop_down absolute right-2 top-3 focus:outline-none focus:ring-1 rounded-full w-3 h-3 flex items-center justify-center">
+                                <i class="fas fa-caret-down text-lg"></i>
+                            </button>         
                         </div>
-                        <span class="${id(dt)}">${description}</span>
-                        <span class="extra_info ${id(dt)}">${humidity}</span>
-                        <span class="extra_info ${id(dt)}">${uvi}</span>
-                        <span class="extra_info ${id(dt)}">${wind_speed}</span>
-                        <span class="extra_info ${id(dt)}">${wind_deg}</span>
+                        <div class="${id(dt)}">${description}</div>
+                        <ul class="extra_info ${id(dt)} extra_info-list">
+                            <li class="">${humidity}</li>
+                            <li class="">${uvi}</li>
+                            <li class="">${wind_speed}</li>
+                            <li class="">${wind_deg}</li>
+                        </ul>
                     </div>`
             }
         })
@@ -136,11 +137,11 @@ $(document).ready(function() {
             } = obj;
             if (i > 0) {
                 html += `<div class="relative my-2 p-2 w-72 sm:mx-2 flex flex-col sm:ring-2 sm:ring-blue-400">
-                        <span class="self-center">${convertDate(dt)}</span>
-                        <span>${max}/${min} 
+                        <div class="self-center">${convertDate(dt)}</div>
+                        <div>${max}/${min} 
                             <img class=" w-16 absolute right-0 top-0" src="http://openweathermap.org/img/wn/${icon}.png" alt="weather icon">
                             <i class="fas fa-caret-down"></i>
-                        </span>
+                        </div>
                         <span>${description}</span>
                         <span>${humidity}</span>
                         <span>${uvi}</span>
@@ -165,11 +166,11 @@ $(document).ready(function() {
             } = obj;
             if (i > 0) {
                 html += `<div class="relative my-2 p-2 w-72 sm:mx-2 flex flex-col sm:ring-2 sm:ring-blue-400">
-                        <span class="self-center">${basicTime(dt)}</span>
-                        <span>${temp} 
+                        <div class="self-center">${basicTime(dt)}</div>
+                        <div>${temp} 
                             <img class=" w-16 absolute right-0 top-0" src="http://openweathermap.org/img/wn/${icon}.png" alt="weather icon">
                             <i class="fas fa-caret-down"></i>
-                        </span>
+                        </div>
                         <span>${description}</span>
                         <span>${humidity}</span>
                         <span>${uvi}</span>
@@ -200,9 +201,15 @@ $(document).ready(function() {
     init(-98.49, 29.42)
 
     function geocode(long, lat) {
-       return fetch (`https://api.mapbox.com/geocoding/v5/mapbox.places/${long},        ${lat}.json?access_token=${mapboxKey}`)
+       return fetch (`https://api.mapbox.com/geocoding/v5/mapbox.places/${long}, ${lat}.json?access_token=${mapboxKey}`)
            .then(res => res.json())
-           .then(data => data.features[3].place_name.slice(0, data.features[3].place_name.indexOf(',')))
+           .then(data => {
+               console.log(data.features[3].place_name)
+               console.log(data);
+               if (data.features[3].place_name.includes(","))
+               return data.features[3].place_name.slice(0, data.features[3].place_name.indexOf(','))
+               else return data.features[3].place_name;
+           })
     }
 
     marker.on('dragend', function() {
@@ -263,18 +270,24 @@ $(document).ready(function() {
 
         fiveDay.on('click', '.drop_down', function(e) {
             e.preventDefault();
+            const dropCards = Array.from($('.five_day'));
             clicked = !clicked;
             if (!clicked) {
+                dropCards.forEach(card => {
+                if ($(card).hasClass($(this).attr('id'))) $(card).removeClass('collapse');
+                });
                 Array.from(fiveDay.children()).forEach((elem) => {
                     if ($(elem).children().hasClass($(this).attr('id'))) {
                         $(elem).children().removeClass('extra_info');
                     }
                 });
             } else {
+                dropCards.forEach(card => {
+                    if ($(card).hasClass($(this).attr('id'))) $(card).addClass('collapse');
+                });
                 Array.from(fiveDay.children()).forEach((elem) => {
                     for (const [i, el] of Array.from($(elem).children()).entries()) {
                         if (i > 1 && $(elem).children().hasClass($(this).attr('id'))) {
-                            console.log(el);
                             $(el).addClass('extra_info');
                         }
                     }

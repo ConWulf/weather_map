@@ -62,8 +62,22 @@
     -ms-overflow-style: none;
 }
 
-.extra_info {
-    @apply hidden
+.extra_info-list.extra_info {
+    height: 1rem;
+    opacity: 0;
+}
+
+.extra_info-list {
+    transition: opacity 800ms linear;
+}
+
+.five_day {
+    height: 10rem;
+    transition: height 200ms ease-in-out;
+}
+
+.collapse {
+    height: 3.5rem;
 }
 
 @tailwind utilities;
