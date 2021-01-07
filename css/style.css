@@ -66,9 +66,5 @@
     display: none;
 }
 
-.extra_info-list li {
-    @apply relative top-0
-}
-
 
 @tailwind utilities;
