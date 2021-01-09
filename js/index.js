@@ -34,31 +34,18 @@ $(document).ready(function() {
         .addTo(map);
 
     const convertTime = (unix) => {
-        let milliseconds = unix * 1000;
-        let dateObj = new Date(milliseconds);
-        let options = {hour: "numeric", minute: "numeric", second: "numeric", timeZoneName: "short"}
-        return dateObj.toLocaleString("en-US", options);
-    }
-
-    const convertDate = (unix) => {
-        let milliseconds = unix * 1000;
-        let dateObj = new Date(milliseconds);
-        let options = {weekday: "long", day: "numeric"}
-        return dateObj.toLocaleString("en-US", options);
-    }
-
-    const basicTime = (unix) => {
-        let milliseconds = unix * 1000;
-        let dateObj = new Date(milliseconds);
-        let options = {hour: "numeric", minute: "numeric"}
-        return dateObj.toLocaleString("en-US", options);
-    }
-
-    const id = (unix) => {
-        let milliseconds = unix * 1000;
-        let dateObj = new Date(milliseconds);
-        let options = {day: "numeric"}
-        return dateObj.toLocaleString("en-US", options);
+        const milliseconds = unix * 1000;
+        const dateObj = new Date(milliseconds);
+        const exactTime = {hour: "numeric", minute: "numeric", second: "numeric", timeZoneName: "short"}
+        const date = {weekday: "long", day: "numeric"}
+        const basicTime = {hour: "numeric", minute: "numeric"}
+        const id = {day: "numeric"}
+        return {
+            exactTime: dateObj.toLocaleString("en-US", exactTime),
+            date: dateObj.toLocaleString("en-US", date),
+            basicTime: dateObj.toLocaleString("en-US", basicTime),
+            id: dateObj.toLocaleString("en-US", id),
+        }
     }
 
     const renderCurrentWeather = (weatherObj, location) => {
@@ -69,10 +56,10 @@ $(document).ready(function() {
             sunrise,
             sunset
         }} = weatherObj;
-        return `<div id="currentCard" class="relative p-3 rounded-lg bg-white mx-auto bg-opacity-60 max-w-2xl text-sm">
+        return `<div id="currentCard" class="relative p-3 rounded-lg bg-white mx-auto bg-opacity-30 max-w-2xl text-sm">
         <div class="flex flex-col">
         <h3 href="#" class="text-lg" id="location">${location}</h3>
-        <h3>as of ${convertTime(dt)}</h3>
+        <h3>as of ${convertTime(dt).exactTime}</h3>
             <div>
                 <p class="right-0 top-0 absolute"><img src="http://openweathermap.org/img/wn/${icon}@2x.png" alt="weather icon" class="w-20"></p>
                 <p class="font-bold text-xl">${temp} °</p>
@@ -80,8 +67,8 @@ $(document).ready(function() {
             <p class="font-semibold">${description}</p>
             <p class="font-semibold">Feels Like ${feels_like}</p>
             <div class="text-xs font-medium">
-                <p class="float-left mr-3">Sunset ${basicTime(sunset)}</p>
-                <p>Sunrise ${basicTime(sunrise)}</p>
+                <p class="float-left mr-3">Sunset ${convertTime(sunset).basicTime}</p>
+                <p>Sunrise ${convertTime(sunrise).basicTime}</p>
             </div>
         </div>
     </div>`
@@ -99,19 +86,19 @@ $(document).ready(function() {
                 humidity
             } = obj;
             if (i > 0 && i <= 5) {
-                html += `<div class="five_day relative p-2 w-full my-2 ring-2 ring-blue-400 collapse ${id(dt)}">
+                html += `<div class="five_day relative p-2 w-full my-2 ring-2 ring-blue-600 dark:ring-gray-600 cards ${convertTime(dt).id}">
                         <div class="text-sm">
-                           <div class="mr-3">${convertDate(dt)}</div>
+                           <div class="mr-3">${convertTime(dt).date}</div>
                             <div>${max}/${min} </div>
                             <div class=" absolute right-5 top-0 flex flex-row-reverse items-center">
                                 <img src="http://openweathermap.org/img/wn/${icon}.png" alt="weather icon">
-                                <div class="${id(dt)}">${description}</div>
+                                <div class="${convertTime(dt).id}">${description}</div>
                             </div>
-                            <button id="${id(dt)}" class="drop_down absolute right-2 top-5 focus:outline-none focus:ring-1 rounded-full w-3 h-3 flex items-center justify-center">
+                            <button id="${convertTime(dt).id}" class="drop_down absolute right-2 top-5 focus:outline-none focus:ring-1 rounded-full w-3 h-3 flex items-center justify-center">
                                 <i class="fas fa-caret-down text-lg"></i>
                             </button>         
                         </div>
-                        <ul class="extra_info ${id(dt)} extra_info-list">
+                        <ul class="extra_info ${convertTime(dt).id} extra_info-list">
                             <li class="">${humidity}</li>
                             <li class="">${uvi}</li>
                             <li class="">${wind_speed}</li>
@@ -135,19 +122,19 @@ $(document).ready(function() {
                 humidity
             } = obj;
             if (i > 0) {
-                html += `<div class="relative my-2 p-2 w-full ring-2 ring-blue-400">
+                html += `<div class="relative my-2 p-2 w-full ring-2 ring-blue-600 dark:ring-gray-600 cards">
                         <div class="text-sm">
-                           <div class="mr-3">${convertDate(dt)}</div>
+                           <div class="mr-3">${convertTime(dt).date}</div>
                             <div>${max}/${min}</div>
                             <div class=" absolute right-5 top-0 flex flex-row-reverse items-center">
                                 <img src="http://openweathermap.org/img/wn/${icon}.png" alt="weather icon">
-                                <div class="${id(dt)}">${description}</div>
+                                <div class="${convertTime(dt).id}">${description}</div>
                             </div>
-                            <button id="${id(dt)}" class="drop_down absolute right-2 top-5 focus:outline-none focus:ring-1 rounded-full w-3 h-3 flex items-center justify-center">
+                            <button id="${convertTime(dt).id}" class="drop_down absolute right-2 top-5 focus:outline-none focus:ring-1 rounded-full w-3 h-3 flex items-center justify-center">
                                 <i class="fas fa-caret-down text-lg"></i>
                             </button>         
                         </div>
-                        <ul class="extra_info ${id(dt)} extra_info-list">
+                        <ul class="extra_info ${convertTime(dt).id} extra_info-list">
                             <li class="">${humidity}</li>
                             <li class="">${uvi}</li>
                             <li class="">${wind_speed}</li>
@@ -171,17 +158,20 @@ $(document).ready(function() {
                 humidity
             } = obj;
             if (i > 0) {
-                html += `<div class="relative my-2 p-2 w-full ring-2 ring-blue-400">
+                html += `<div class="relative my-2 p-2 w-full ring-2 ring-blue-600 dark:ring-gray-600 cards">
                         <div class="text-sm">
-                        <div class="self-center">${basicTime(dt)} <span class="${id(dt)}">${description}</span></div>
+                        <div class="self-center">${convertTime(dt).basicTime}</div>
                         <div>${temp} 
-                            <img class="w-10 absolute right-10 top-0" src="http://openweathermap.org/img/wn/${icon}.png" alt="weather icon">
-                             <button id="${id(dt)}" class="drop_down absolute right-2 top-3 focus:outline-none focus:ring-1 rounded-full w-3 h-3 flex items-center justify-center">
+                        <div class=" absolute right-5 top-0 flex flex-row-reverse items-center">
+                            <img src="http://openweathermap.org/img/wn/${icon}.png" alt="weather icon">
+                            <div class="${convertTime(dt).id}">${description}</div>
+                        </div>
+                             <button id="${convertTime(dt).id}" class="drop_down absolute right-2 top-5 focus:outline-none focus:ring-1 rounded-full w-3 h-3 flex items-center justify-center">
                                 <i class="fas fa-caret-down text-lg"></i>
                             </button>
                         </div>
                         </div>
-                        <ul class="extra_info ${id(dt)} extra_info-list">
+                        <ul class="extra_info ${convertTime(dt).id} extra_info-list">
                             <li class="">${humidity}</li>
                             <li class="">${uvi}</li>
                             <li class="">${wind_speed}</li>
@@ -191,6 +181,11 @@ $(document).ready(function() {
             }
         })
         return html;
+    }
+
+    const renderFutureWeather = (weatherObj) => {
+        const {daily, hourly} = weatherObj;
+        return hourly;
     }
 
     const getWeather = (long, lat) => {
@@ -204,6 +199,7 @@ $(document).ready(function() {
             cardArr[0].html(renderFiveDay(weatherData));
             cardArr[1].html(renderSevenDay(weatherData));
             cardArr[2].html(renderHourly(weatherData));
+            console.log(renderFutureWeather(weatherData));
             geocode(lng, lat).then(locationData => {
                 overviewCard.html(renderCurrentWeather(weatherData, locationData));
             })
@@ -215,7 +211,6 @@ $(document).ready(function() {
        return fetch (`https://api.mapbox.com/geocoding/v5/mapbox.places/${long}, ${lat}.json?access_token=${mapboxKey}`)
            .then(res => res.json())
            .then(data => {
-               console.log(data.features[3].place_name)
                console.log(data);
                if (data.features[3].place_name.includes(","))
                return data.features[3].place_name.slice(0, data.features[3].place_name.indexOf(','))
@@ -230,26 +225,11 @@ $(document).ready(function() {
     })
 
     slider.on('click', function() {
-        const card = $("#currentCard");
-        const fiveDay = $('#fiveDay');
         const sliderCheck = $('#toggle:checked');
         if (sliderCheck.length === 1) {
             html.addClass("dark");
-            card.addClass("bg-opacity-30");
-            card.removeClass("bg-opacity-60");
-            fiveDay.addClass('bg-opacity-20');
-            fiveDay.removeClass('bg-opacity-60');
-            tabs.addClass('bg-opacity-10');
-            tabs.removeClass('bg-opacity-50');
-
         } else {
             html.removeClass("dark");
-            card.removeClass("bg-opacity-30");
-            card.addClass("bg-opacity-60");
-            fiveDay.removeClass('bg-opacity-20');
-            fiveDay.addClass('bg-opacity-60');
-            tabs.removeClass('bg-opacity-10');
-            tabs.addClass('bg-opacity-50');
         }
 
 
@@ -318,10 +298,5 @@ $(document).ready(function() {
     cardArr.forEach(el => {
         el.on('click', '.drop_down', {node: el}, dropDown);
     });
-
-
-
-
-
 
 });
