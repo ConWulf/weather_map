@@ -99,12 +99,15 @@ $(document).ready(function() {
                 humidity
             } = obj;
             if (i > 0 && i <= 5) {
-                html += `<div class="five_day relative p-2 w-full sm:m-2 flex flex-col ring-2 ring-blue-400 collapse ${id(dt)}">
+                html += `<div class="five_day relative p-2 w-full my-2 ring-2 ring-blue-400 collapse ${id(dt)}">
                         <div class="text-sm">
-                           <div class="mr-3">${convertDate(dt)} <span class="${id(dt)}">${description}</span></div>
-                            <div>${max}/${min}</div>
-                            <img class=" w-10 absolute right-10 top-0" src="http://openweathermap.org/img/wn/${icon}.png" alt="weather icon">
-                            <button id="${id(dt)}" class="drop_down absolute right-2 top-3 focus:outline-none focus:ring-1 rounded-full w-3 h-3 flex items-center justify-center">
+                           <div class="mr-3">${convertDate(dt)}</div>
+                            <div>${max}/${min} </div>
+                            <div class=" absolute right-5 top-0 flex flex-row-reverse items-center">
+                                <img src="http://openweathermap.org/img/wn/${icon}.png" alt="weather icon">
+                                <div class="${id(dt)}">${description}</div>
+                            </div>
+                            <button id="${id(dt)}" class="drop_down absolute right-2 top-5 focus:outline-none focus:ring-1 rounded-full w-3 h-3 flex items-center justify-center">
                                 <i class="fas fa-caret-down text-lg"></i>
                             </button>         
                         </div>
@@ -132,12 +135,15 @@ $(document).ready(function() {
                 humidity
             } = obj;
             if (i > 0) {
-                html += `<div class="relative my-2 p-2 w-72 sm:mx-2 flex flex-col sm:ring-2 sm:ring-blue-400">
+                html += `<div class="relative my-2 p-2 w-full ring-2 ring-blue-400">
                         <div class="text-sm">
-                           <div class="mr-3">${convertDate(dt)} <span class="${id(dt)}">${description}</span></div>
+                           <div class="mr-3">${convertDate(dt)}</div>
                             <div>${max}/${min}</div>
-                            <img class=" w-10 absolute right-10 top-0" src="http://openweathermap.org/img/wn/${icon}.png" alt="weather icon">
-                            <button id="${id(dt)}" class="drop_down absolute right-2 top-3 focus:outline-none focus:ring-1 rounded-full w-3 h-3 flex items-center justify-center">
+                            <div class=" absolute right-5 top-0 flex flex-row-reverse items-center">
+                                <img src="http://openweathermap.org/img/wn/${icon}.png" alt="weather icon">
+                                <div class="${id(dt)}">${description}</div>
+                            </div>
+                            <button id="${id(dt)}" class="drop_down absolute right-2 top-5 focus:outline-none focus:ring-1 rounded-full w-3 h-3 flex items-center justify-center">
                                 <i class="fas fa-caret-down text-lg"></i>
                             </button>         
                         </div>
@@ -165,17 +171,22 @@ $(document).ready(function() {
                 humidity
             } = obj;
             if (i > 0) {
-                html += `<div class="relative my-2 p-2 w-72 sm:mx-2 flex flex-col sm:ring-2 sm:ring-blue-400">
-                        <div class="self-center">${basicTime(dt)}</div>
+                html += `<div class="relative my-2 p-2 w-full ring-2 ring-blue-400">
+                        <div class="text-sm">
+                        <div class="self-center">${basicTime(dt)} <span class="${id(dt)}">${description}</span></div>
                         <div>${temp} 
-                            <img class=" w-16 absolute right-0 top-0" src="http://openweathermap.org/img/wn/${icon}.png" alt="weather icon">
-                            <i class="fas fa-caret-down"></i>
+                            <img class="w-10 absolute right-10 top-0" src="http://openweathermap.org/img/wn/${icon}.png" alt="weather icon">
+                             <button id="${id(dt)}" class="drop_down absolute right-2 top-3 focus:outline-none focus:ring-1 rounded-full w-3 h-3 flex items-center justify-center">
+                                <i class="fas fa-caret-down text-lg"></i>
+                            </button>
                         </div>
-                        <span>${description}</span>
-                        <span>${humidity}</span>
-                        <span>${uvi}</span>
-                        <span>${wind_speed}</span>
-                        <span>${wind_deg}</span>
+                        </div>
+                        <ul class="extra_info ${id(dt)} extra_info-list">
+                            <li class="">${humidity}</li>
+                            <li class="">${uvi}</li>
+                            <li class="">${wind_speed}</li>
+                            <li class="">${wind_deg}</li>
+                        </ul>
                     </div>`
             }
         })
@@ -284,6 +295,7 @@ $(document).ready(function() {
     }
 
     tabs.on('click', showTabContent);
+
 
     function dropDown(e) {
         e.preventDefault();
