@@ -1,10 +1,10 @@
 
+    const moment = require('moment-timezone');
 $(document).ready(function() {
-
     const html = $('html');
     const slider = $('#toggle');
     const overviewCard = $("#current");
-    const tabContent = $(".content");
+    const tabContent = $(".cards");
     const tabs = $(".links");
     const cardArr = [ $("#fiveDay"), $("#sevenDay"), $("#hourly")];
     let hourlyId = 0;
@@ -14,9 +14,8 @@ $(document).ready(function() {
         center: [-98.49, 29.42], // starting position [lng, lat]
         zoom: 9, // starting zoom
         minZoom: 1,
-        style: 'mapbox://styles/mapbox/satellite-streets-v11'
+        style: 'mapbox://styles/mapbox/navigation-preview-day-v4'
     }
-
     mapboxgl.accessToken = mapboxKey;
     const map = new mapboxgl.Map(mapOptions);
 
@@ -37,8 +36,8 @@ $(document).ready(function() {
     const convertTime = (unix) => {
         const milliseconds = unix * 1000;
         const dateObj = new Date(milliseconds);
-        const exactTime = {hour: "numeric", minute: "numeric", second: "numeric", timeZoneName: "short"}
-        const date = {weekday: "long", day: "numeric"}
+        const exactTime = {hour: "numeric", minute: "numeric", second: "numeric", timeZoneName: "short"};
+        const date = {weekday: "long", day: "numeric"};
         const basicTime = {hour: "numeric", minute: "numeric"}
         const id = {day: "numeric"}
         return {
@@ -49,18 +48,28 @@ $(document).ready(function() {
         }
     }
 
+    const getLocalTime = (unix, tz) => {
+        const milliseconds = unix * 1000;
+        console.log(moment.tz(milliseconds, tz));
+        return moment.tz(milliseconds, tz).format('HH:mm:ss z');
+    }
+
     const renderCurrentWeather = (weatherObj, location) => {
         let {current: {temp,
             feels_like,
             weather: [{description, icon}],
             dt,
             sunrise,
-            sunset
-        }} = weatherObj;
-        return `<div id="currentCard" class="shadow-lg relative p-3 rounded-lg bg-white mx-auto bg-opacity-30 max-w-2xl text-sm">
+            sunset,
+        },
+            timezone,
+            timezone_offset
+        } = weatherObj;
+        console.log(getLocalTime(dt, timezone));
+        return `<div id="currentCard" class="current-weather-card">
         <div class="flex flex-col">
         <h3 class="text-lg w-9/12" id="location">${location}</h3>
-        <h3>as of ${convertTime(dt).exactTime}</h3>
+        <h3>as of ${getLocalTime(dt, timezone)}</h3>
             <div>
                 <p class="right-0 top-0 absolute"><img src="http://openweathermap.org/img/wn/${icon}@2x.png" alt="weather icon" class="w-20"></p>
                 <p class="font-bold text-xl">${temp} °</p>
@@ -88,7 +97,7 @@ $(document).ready(function() {
                 humidity
             } = obj;
             if (i > 0) {
-                html += `<div class="relative my-2 p-2 w-full ring-2 ring-blue-600 dark:ring-gray-600 cards ${hourlyId}">
+                html += `<div class="cards-content">
                         <div class="text-sm">
                         <div class="self-center">${convertTime(dt).basicTime}</div>
                         <div>${temp} 
@@ -127,7 +136,7 @@ $(document).ready(function() {
                 humidity
             } = obj;
             if (i > 0 && i <= 5)
-                fiveDay += `<div class="fiveDay relative p-2 w-full my-2 ring-2 ring-blue-600 dark:ring-gray-600 cards ${convertTime(dt).id}">
+                fiveDay += `<div class="cards-content">
                         <div class="text-sm">
                            <div class="mr-3">${convertTime(dt).date}</div>
                             <div>${max}/${min} </div>
@@ -147,7 +156,7 @@ $(document).ready(function() {
                         </ul>
                     </div>`
             if (i > 0)
-                sevenDay += `<div class="relative my-2 p-2 w-full ring-2 ring-blue-600 dark:ring-gray-600 cards">
+                sevenDay += `<div class="cards-content">
                         <div class="text-sm">
                            <div class="mr-3">${convertTime(dt).date}</div>
                             <div>${max}/${min}</div>
@@ -223,9 +232,11 @@ $(document).ready(function() {
         if (sliderCheck.length === 1) {
             html.addClass("dark");
             bg.addClass('dark-bg');
+            map.setStyle("mapbox://styles/mapbox/navigation-preview-night-v4");
         } else {
             html.removeClass("dark");
             bg.removeClass('dark-bg');
+            map.setStyle("mapbox://styles/mapbox/navigation-preview-day-v4");
         }
 
 
@@ -242,7 +253,15 @@ $(document).ready(function() {
         }
     }
 
+    function focusTab() {
+        for (const tab of tabs) {
+            $(tab).removeClass('clicked');
+        }
+        $(this).addClass('clicked');
+    }
+
     tabs.on('click', showTabContent);
+    tabs.on('click', focusTab);
 
     function dropDown(e) {
         e.preventDefault();

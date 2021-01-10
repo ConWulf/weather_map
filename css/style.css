@@ -59,6 +59,7 @@ body {
 }
 
 .tabs button {
+    transition: background-color 600ms ease-in-out;
     @apply float-left outline-none cursor-pointer px-4 py-1
 }
 
@@ -66,7 +67,7 @@ body {
     @apply bg-opacity-0
 }
 
-.tabs button:focus {
+.tabs button.clicked {
     @apply bg-opacity-10 ring-2 ring-inset ring-blue-600
 }
 
@@ -101,7 +102,8 @@ body {
 }
 
 .cards {
-    transition: box-shadow 600ms ease-in-out;
+    transition: box-shadow 600ms ease-in-out, background-color 600ms ease-in-out;
+    @apply relative z-10 h-full w-full p-1 grid grid-cols-1 justify-items-center bg-white bg-opacity-40 mt-2 rounded-xl dark:bg-opacity-20
 }
 
 .drop_down-btn {
@@ -138,7 +140,19 @@ body {
     transition: background-color 600ms ease-in-out;
 }
 
+.cards-content {
+    transition: box-shadow 600ms ease-in-out;
+    @apply relative p-2 w-full my-2 ring-2 ring-inset rounded-md ring-blue-600 dark:ring-gray-600
+}
 
+.current-weather-card {
+    transition: background-color 600ms ease-in-out;
+    @apply shadow-lg relative p-3 rounded-lg bg-white mx-auto bg-opacity-40 max-w-2xl text-sm dark:bg-opacity-20
+}
+
+nav, footer {
+    transition: background-color 600ms ease-in-out;
+}
 
 
 @tailwind utilities;
