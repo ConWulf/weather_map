@@ -33,25 +33,18 @@ $(document).ready(function() {
         .setLngLat([-98.49, 29.42])
         .addTo(map);
 
-    const convertTime = (unix) => {
-        const milliseconds = unix * 1000;
-        const dateObj = new Date(milliseconds);
-        const exactTime = {hour: "numeric", minute: "numeric", second: "numeric", timeZoneName: "short"};
-        const date = {weekday: "long", day: "numeric"};
-        const basicTime = {hour: "numeric", minute: "numeric"}
-        const id = {day: "numeric"}
-        return {
-            exactTime: dateObj.toLocaleString("en-US", exactTime),
-            date: dateObj.toLocaleString("en-US", date),
-            basicTime: dateObj.toLocaleString("en-US", basicTime),
-            id: dateObj.toLocaleString("en-US", id),
-        }
-    }
-
     const getLocalTime = (unix, tz) => {
         const milliseconds = unix * 1000;
-        console.log(moment.tz(milliseconds, tz));
-        return moment.tz(milliseconds, tz).format('HH:mm:ss z');
+        const date = moment.tz(milliseconds, tz).format('DD ddd ');
+        const exactTime = moment.tz(milliseconds, tz).format('HH:mm:ss z');
+        const id = moment.tz(milliseconds, tz).format('DD');
+        const time = moment.tz(milliseconds, tz).format('HH:mm');
+        return {
+            date,
+            time,
+            id,
+            exactTime
+        };
     }
 
     const renderCurrentWeather = (weatherObj, location) => {
@@ -62,14 +55,13 @@ $(document).ready(function() {
             sunrise,
             sunset,
         },
-            timezone,
-            timezone_offset
+            timezone
         } = weatherObj;
-        console.log(getLocalTime(dt, timezone));
+        getLocalTime(dt, timezone);
         return `<div id="currentCard" class="current-weather-card">
         <div class="flex flex-col">
         <h3 class="text-lg w-9/12" id="location">${location}</h3>
-        <h3>as of ${getLocalTime(dt, timezone)}</h3>
+        <h3>as of ${getLocalTime(dt, timezone).exactTime}</h3>
             <div>
                 <p class="right-0 top-0 absolute"><img src="http://openweathermap.org/img/wn/${icon}@2x.png" alt="weather icon" class="w-20"></p>
                 <p class="font-bold text-xl">${temp} °</p>
@@ -77,8 +69,8 @@ $(document).ready(function() {
             <p class="font-semibold">${description}</p>
             <p class="font-semibold">Feels Like ${feels_like}</p>
             <div class="text-xs font-medium">
-                <p class="float-left mr-3">Sunset ${convertTime(sunset).basicTime}</p>
-                <p>Sunrise ${convertTime(sunrise).basicTime}</p>
+                <p class="float-left mr-3">Sunset ${getLocalTime(sunset, timezone).basicTime}</p>
+                <p>Sunrise ${getLocalTime(sunrise, timezone).basicTime}</p>
             </div>
         </div>
     </div>`
@@ -86,6 +78,7 @@ $(document).ready(function() {
 
     const renderHourly = (weatherObj) => {
         let html = ''
+        const {timezone} = weatherObj;
         weatherObj.hourly.forEach((obj, i) => {
             hourlyId += 1;
             const {dt,
@@ -99,7 +92,7 @@ $(document).ready(function() {
             if (i > 0) {
                 html += `<div class="cards-content">
                         <div class="text-sm">
-                        <div class="self-center">${convertTime(dt).basicTime}</div>
+                        <div class="self-center">${getLocalTime(dt, timezone).time}</div>
                         <div>${temp} 
                         <div class=" absolute right-5 top-0 flex flex-row-reverse items-center">
                             <img src="http://openweathermap.org/img/wn/${icon}.png" alt="weather icon">
@@ -123,7 +116,7 @@ $(document).ready(function() {
     }
 
     const renderFutureWeather = (weatherObj) => {
-        const {daily, hourly} = weatherObj;
+        const {daily, timezone} = weatherObj;
         let fiveDay = "";
         let sevenDay = "";
         daily.forEach((obj, i) => {
@@ -138,17 +131,17 @@ $(document).ready(function() {
             if (i > 0 && i <= 5)
                 fiveDay += `<div class="cards-content">
                         <div class="text-sm">
-                           <div class="mr-3">${convertTime(dt).date}</div>
+                           <div class="mr-3">${getLocalTime(dt, timezone).date}</div>
                             <div>${max}/${min} </div>
                             <div class=" absolute right-5 top-0 flex flex-row-reverse items-center">
                                 <img src="http://openweathermap.org/img/wn/${icon}.png" alt="weather icon">
                                 <div>${description}</div>
                             </div>
-                            <button id="${convertTime(dt).id}" class="drop_down drop_down-btn">
+                            <button id="${getLocalTime(dt, timezone).id}" class="drop_down drop_down-btn">
                                 <i class="fas fa-caret-down text-lg icon transition-transform duration-300 ease-linear"></i>
                             </button>         
                         </div>
-                        <ul class="slideup ${convertTime(dt).id}">
+                        <ul class="slideup ${getLocalTime(dt, timezone).id}">
                             <li class="">${humidity}</li>
                             <li class="">${uvi}</li>
                             <li class="">${wind_speed}</li>
@@ -158,17 +151,17 @@ $(document).ready(function() {
             if (i > 0)
                 sevenDay += `<div class="cards-content">
                         <div class="text-sm">
-                           <div class="mr-3">${convertTime(dt).date}</div>
+                           <div class="mr-3">${getLocalTime(dt, timezone).date}</div>
                             <div>${max}/${min}</div>
                             <div class=" absolute right-5 top-0 flex flex-row-reverse items-center">
                                 <img src="http://openweathermap.org/img/wn/${icon}.png" alt="weather icon">
                                 <div>${description}</div>
                             </div>
-                            <button id="${convertTime(dt).id}" class="drop_down drop_down-btn">
+                            <button id="${getLocalTime(dt, timezone).id}" class="drop_down drop_down-btn">
                                 <i class="fas fa-caret-down text-lg transition-transform duration-300 ease-linear"></i>
                             </button>         
                         </div>
-                        <ul class="slideup ${convertTime(dt).id}">
+                        <ul class="slideup ${getLocalTime(dt, timezone).id}">
                             <li class="">${humidity}</li>
                             <li class="">${uvi}</li>
                             <li class="">${wind_speed}</li>
