@@ -6,8 +6,9 @@ $(document).ready(function() {
     const overviewCard = $("#current");
     const tabContent = $(".content");
     const tabs = $(".links");
-    const cardArr = [ $("#fiveDay"), $("#sevenDay"), $("#hourly")]
-    let clicked = true;
+    const cardArr = [ $("#fiveDay"), $("#sevenDay"), $("#hourly")];
+    let hourlyId = 0;
+    const bg = $('.main-bg');
     const mapOptions = {
         container: 'map',
         center: [-98.49, 29.42], // starting position [lng, lat]
@@ -56,9 +57,9 @@ $(document).ready(function() {
             sunrise,
             sunset
         }} = weatherObj;
-        return `<div id="currentCard" class="relative p-3 rounded-lg bg-white mx-auto bg-opacity-30 max-w-2xl text-sm">
+        return `<div id="currentCard" class="shadow-lg relative p-3 rounded-lg bg-white mx-auto bg-opacity-30 max-w-2xl text-sm">
         <div class="flex flex-col">
-        <h3 href="#" class="text-lg" id="location">${location}</h3>
+        <h3 class="text-lg w-9/12" id="location">${location}</h3>
         <h3>as of ${convertTime(dt).exactTime}</h3>
             <div>
                 <p class="right-0 top-0 absolute"><img src="http://openweathermap.org/img/wn/${icon}@2x.png" alt="weather icon" class="w-20"></p>
@@ -74,81 +75,10 @@ $(document).ready(function() {
     </div>`
     }
 
-    const renderFiveDay = (weatherObj) => {
-        let html = ''
-        weatherObj.daily.forEach((obj, i) => {
-            const {dt,
-                temp: { max, min},
-                weather: [{description, icon}],
-                wind_deg,
-                wind_speed,
-                uvi,
-                humidity
-            } = obj;
-            if (i > 0 && i <= 5) {
-                html += `<div class="five_day relative p-2 w-full my-2 ring-2 ring-blue-600 dark:ring-gray-600 cards ${convertTime(dt).id}">
-                        <div class="text-sm">
-                           <div class="mr-3">${convertTime(dt).date}</div>
-                            <div>${max}/${min} </div>
-                            <div class=" absolute right-5 top-0 flex flex-row-reverse items-center">
-                                <img src="http://openweathermap.org/img/wn/${icon}.png" alt="weather icon">
-                                <div class="${convertTime(dt).id}">${description}</div>
-                            </div>
-                            <button id="${convertTime(dt).id}" class="drop_down absolute right-2 top-5 focus:outline-none focus:ring-1 rounded-full w-3 h-3 flex items-center justify-center">
-                                <i class="fas fa-caret-down text-lg"></i>
-                            </button>         
-                        </div>
-                        <ul class="extra_info ${convertTime(dt).id} extra_info-list">
-                            <li class="">${humidity}</li>
-                            <li class="">${uvi}</li>
-                            <li class="">${wind_speed}</li>
-                            <li class="">${wind_deg}</li>
-                        </ul>
-                    </div>`
-            }
-        })
-        return html;
-    }
-
-    const renderSevenDay = (weatherObj) => {
-        let html = ''
-        weatherObj.daily.forEach((obj, i) => {
-            const {dt,
-                temp: { max, min},
-                weather: [{description, icon}],
-                wind_deg,
-                wind_speed,
-                uvi,
-                humidity
-            } = obj;
-            if (i > 0) {
-                html += `<div class="relative my-2 p-2 w-full ring-2 ring-blue-600 dark:ring-gray-600 cards">
-                        <div class="text-sm">
-                           <div class="mr-3">${convertTime(dt).date}</div>
-                            <div>${max}/${min}</div>
-                            <div class=" absolute right-5 top-0 flex flex-row-reverse items-center">
-                                <img src="http://openweathermap.org/img/wn/${icon}.png" alt="weather icon">
-                                <div class="${convertTime(dt).id}">${description}</div>
-                            </div>
-                            <button id="${convertTime(dt).id}" class="drop_down absolute right-2 top-5 focus:outline-none focus:ring-1 rounded-full w-3 h-3 flex items-center justify-center">
-                                <i class="fas fa-caret-down text-lg"></i>
-                            </button>         
-                        </div>
-                        <ul class="extra_info ${convertTime(dt).id} extra_info-list">
-                            <li class="">${humidity}</li>
-                            <li class="">${uvi}</li>
-                            <li class="">${wind_speed}</li>
-                            <li class="">${wind_deg}</li>
-                        </ul>
-                    </div>`
-            }
-        })
-        return html;
-    }
-
     const renderHourly = (weatherObj) => {
         let html = ''
         weatherObj.hourly.forEach((obj, i) => {
+            hourlyId += 1;
             const {dt,
                 temp,
                 weather: [{description, icon}],
@@ -158,20 +88,20 @@ $(document).ready(function() {
                 humidity
             } = obj;
             if (i > 0) {
-                html += `<div class="relative my-2 p-2 w-full ring-2 ring-blue-600 dark:ring-gray-600 cards">
+                html += `<div class="relative my-2 p-2 w-full ring-2 ring-blue-600 dark:ring-gray-600 cards ${hourlyId}">
                         <div class="text-sm">
                         <div class="self-center">${convertTime(dt).basicTime}</div>
                         <div>${temp} 
                         <div class=" absolute right-5 top-0 flex flex-row-reverse items-center">
                             <img src="http://openweathermap.org/img/wn/${icon}.png" alt="weather icon">
-                            <div class="${convertTime(dt).id}">${description}</div>
+                            <div>${description}</div>
                         </div>
-                             <button id="${convertTime(dt).id}" class="drop_down absolute right-2 top-5 focus:outline-none focus:ring-1 rounded-full w-3 h-3 flex items-center justify-center">
-                                <i class="fas fa-caret-down text-lg"></i>
+                             <button id="${hourlyId}" class="drop_down drop_down-btn">
+                                <i class="fas fa-caret-down text-lg transition-transform duration-300 ease-linear"></i>
                             </button>
                         </div>
                         </div>
-                        <ul class="extra_info ${convertTime(dt).id} extra_info-list">
+                        <ul class="slideup ${hourlyId}">
                             <li class="">${humidity}</li>
                             <li class="">${uvi}</li>
                             <li class="">${wind_speed}</li>
@@ -185,7 +115,62 @@ $(document).ready(function() {
 
     const renderFutureWeather = (weatherObj) => {
         const {daily, hourly} = weatherObj;
-        return hourly;
+        let fiveDay = "";
+        let sevenDay = "";
+        daily.forEach((obj, i) => {
+            const {dt,
+                temp: { max, min},
+                weather: [{description, icon}],
+                wind_deg,
+                wind_speed,
+                uvi,
+                humidity
+            } = obj;
+            if (i > 0 && i <= 5)
+                fiveDay += `<div class="fiveDay relative p-2 w-full my-2 ring-2 ring-blue-600 dark:ring-gray-600 cards ${convertTime(dt).id}">
+                        <div class="text-sm">
+                           <div class="mr-3">${convertTime(dt).date}</div>
+                            <div>${max}/${min} </div>
+                            <div class=" absolute right-5 top-0 flex flex-row-reverse items-center">
+                                <img src="http://openweathermap.org/img/wn/${icon}.png" alt="weather icon">
+                                <div>${description}</div>
+                            </div>
+                            <button id="${convertTime(dt).id}" class="drop_down drop_down-btn">
+                                <i class="fas fa-caret-down text-lg icon transition-transform duration-300 ease-linear"></i>
+                            </button>         
+                        </div>
+                        <ul class="slideup ${convertTime(dt).id}">
+                            <li class="">${humidity}</li>
+                            <li class="">${uvi}</li>
+                            <li class="">${wind_speed}</li>
+                            <li class="">${wind_deg}</li>
+                        </ul>
+                    </div>`
+            if (i > 0)
+                sevenDay += `<div class="relative my-2 p-2 w-full ring-2 ring-blue-600 dark:ring-gray-600 cards">
+                        <div class="text-sm">
+                           <div class="mr-3">${convertTime(dt).date}</div>
+                            <div>${max}/${min}</div>
+                            <div class=" absolute right-5 top-0 flex flex-row-reverse items-center">
+                                <img src="http://openweathermap.org/img/wn/${icon}.png" alt="weather icon">
+                                <div>${description}</div>
+                            </div>
+                            <button id="${convertTime(dt).id}" class="drop_down drop_down-btn">
+                                <i class="fas fa-caret-down text-lg transition-transform duration-300 ease-linear"></i>
+                            </button>         
+                        </div>
+                        <ul class="slideup ${convertTime(dt).id}">
+                            <li class="">${humidity}</li>
+                            <li class="">${uvi}</li>
+                            <li class="">${wind_speed}</li>
+                            <li class="">${wind_deg}</li>
+                        </ul>
+                    </div>`
+        });
+        return {
+            fiveDay,
+            sevenDay
+        }
     }
 
     const getWeather = (long, lat) => {
@@ -196,10 +181,11 @@ $(document).ready(function() {
     const init = (lng, lat) => {
         getWeather(lng, lat).then(weatherData => {
             console.log(weatherData);
-            cardArr[0].html(renderFiveDay(weatherData));
-            cardArr[1].html(renderSevenDay(weatherData));
+            cardArr.forEach(elem => {
+               if (renderFutureWeather(weatherData).hasOwnProperty(elem.attr('id')))
+                   elem.html(renderFutureWeather(weatherData)[elem.attr('id')]);
+            });
             cardArr[2].html(renderHourly(weatherData));
-            console.log(renderFutureWeather(weatherData));
             geocode(lng, lat).then(locationData => {
                 overviewCard.html(renderCurrentWeather(weatherData, locationData));
             })
@@ -212,10 +198,18 @@ $(document).ready(function() {
            .then(res => res.json())
            .then(data => {
                console.log(data);
-               if (data.features[3].place_name.includes(","))
-               return data.features[3].place_name.slice(0, data.features[3].place_name.indexOf(','))
-               else return data.features[3].place_name;
-           })
+               let locationArr = data.features[0].place_name.match(/[^,]+/g);
+               if(locationArr.length === 1 || locationArr.length === 2)
+                   return locationArr.join('');
+               if(locationArr[locationArr.length - 1].trim() === data.features[data.features.length -1].place_name)
+                   locationArr.pop();
+               else if (locationArr[0].trim() === data.features[data.features.length -1].place_name)
+                   locationArr.shift();
+               if (locationArr[0].trim() === data.features[0].place_name.substring(0, data.features[0].place_name.indexOf(",")))
+                   locationArr.shift();
+
+               return locationArr.join(", ");
+           });
     }
 
     marker.on('dragend', function() {
@@ -228,8 +222,10 @@ $(document).ready(function() {
         const sliderCheck = $('#toggle:checked');
         if (sliderCheck.length === 1) {
             html.addClass("dark");
+            bg.addClass('dark-bg');
         } else {
             html.removeClass("dark");
+            bg.removeClass('dark-bg');
         }
 
 
@@ -239,60 +235,24 @@ $(document).ready(function() {
         for (const content of tabContent) {
             $(content).addClass("hidden");
         }
-
-        if (html.hasClass("dark")) {
-            for (const tab of tabs) {
-                $(tab).addClass('bg-opacity-10');
-                $(tab).removeClass('bg-opacity-50');
-            }
-
-            for (const content of tabContent) {
-                if($(content).hasClass(($(this).attr('id')))) {
+        for (const content of tabContent) {
+            if($(content).hasClass(($(this).attr('id')))) {
                     $(content).removeClass("hidden");
-                }
             }
-
-            $(this).removeClass('bg-opacity-10');
-            $(this).addClass('bg-opacity-50');
         }
-        else {
-
-            for (const tab of tabs) {
-                $(tab).addClass('bg-opacity-50');
-                $(tab).removeClass('bg-opacity-20');
-            }
-
-            for (const content of tabContent) {
-                if($(content).hasClass(($(this).attr('id')))) {
-                    $(content).removeClass("hidden");
-                }
-            }
-
-            $(this).removeClass('bg-opacity-50');
-            $(this).addClass('bg-opacity-20');
-        }
-
     }
 
     tabs.on('click', showTabContent);
 
-
     function dropDown(e) {
         e.preventDefault();
-        clicked = !clicked;
-        if (!clicked) {
-            Array.from(e.data.node.children()).forEach((elem) => {
-                if ($(elem).children().hasClass($(this).attr('id'))) {
-                    $(elem).children().removeClass('extra_info');
-                }
-            });
-        } else {
-            Array.from(e.data.node.children()).forEach((elem) => {
-                if ($(elem).children().hasClass($(this).attr('id'))) {
-                    $(elem).children().addClass('extra_info');
-                }
-            });
-        }
+        Array.from(e.data.node.children()).forEach((elem) => {
+            if ($(elem).children().hasClass($(this).attr('id'))) {
+                $(elem).children().toggleClass('slidedown');
+                $(elem).children().toggleClass('slideup');
+            }
+        });
+        $(this).children().toggleClass('rotate');
     }
 
     cardArr.forEach(el => {

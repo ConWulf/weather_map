@@ -3,7 +3,13 @@ module.exports = {
   darkMode: 'class', // or 'media' or 'class'
   theme: {
     extend: {
-      backgroundOpacity: ['dark']
+      backgroundOpacity: ['dark'],
+      backgroundImage: theme => ({
+        'clouds': "url(/img/pexels-eberhard-grossgasteiger-844297.jpg)"
+      }),
+      zIndex: {
+        '-10': '-10'
+      }
     },
   },
   variants: {

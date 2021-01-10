@@ -23,7 +23,7 @@
 }
 
 body {
-    transition: background-color 700ms ease-in-out, color 700ms ease-in-out;
+    transition: color 700ms ease-in-out;
 }
 
 .switch::after {
@@ -59,16 +59,41 @@ body {
 }
 
 .tabs button {
-    @apply float-left border border-b-0 outline-none cursor-pointer px-4 py-1
+    @apply float-left outline-none cursor-pointer px-4 py-1
 }
 
+.tabs button:hover {
+    @apply bg-opacity-0
+}
+
+.tabs button:focus {
+    @apply bg-opacity-10 ring-2 ring-inset ring-blue-600
+}
+
+
 .tabs button:nth-child(2) {
-    @apply border-l-0 border-r-0
+    @apply border-l border-r
+}
+
+.tabs button:nth-child(3) {
+    @apply border-r
 }
 
 .tab-content-wrapper::-webkit-scrollbar {
     display: none;
     -ms-overflow-style: none;
+}
+
+.slideup, .slidedown {
+    max-height: 0;
+    overflow-y: hidden;
+    -webkit-transition: max-height 300ms ease-in-out;
+    -moz-transition: max-height 300ms ease-in-out;
+    -o-transition: max-height 300ms ease-in-out;
+    transition: max-height 300ms ease-in-out;
+}
+.slidedown {
+    max-height: 8rem ;
 }
 
 .extra_info-list.extra_info {
@@ -78,6 +103,42 @@ body {
 .cards {
     transition: box-shadow 600ms ease-in-out;
 }
+
+.drop_down-btn {
+    @apply absolute right-2 top-5 focus:outline-none focus:ring-2 focus:ring-blue-600 rounded-sm w-3 h-3 flex items-center justify-center
+}
+
+.rotate {
+    transform: rotatez(180deg);
+}
+
+.main-bg{
+    @apply bg-clouds bg-cover bg-center dark:bg-gray-800 dark:text-gray-100
+}
+
+.main-bg::before {
+    content: '';
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.3);
+    position: absolute;
+    right: 0;
+    top: 0;
+    transition: background-color 600ms ease-in-out;
+}
+
+.main-bg.dark-bg::before {
+    content: '';
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.8);
+    position: absolute;
+    right: 0;
+    top: 0;
+    transition: background-color 600ms ease-in-out;
+}
+
+
 
 
 @tailwind utilities;

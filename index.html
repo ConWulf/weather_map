@@ -10,41 +10,41 @@
 	<link rel="stylesheet" href="build/style.css">
 	<title>Weather map</title>
 </head>
-<body class="w-screen h-screen overflow-x-hidden bg-blue-600 dark:bg-gray-800 dark:text-gray-100">
-	<nav id="nav" class="h-14 w-full bg-white bg-opacity-40">
+<body class="w-screen h-screen overflow-x-hidden dark:text-gray-200">
+	<div class="main-bg absolute w-full h-full -z-10"></div>
+	<nav id="nav" class="relative h-14 w-full bg-white bg-opacity-40 z-10">
 		<div class="flex items-center justify-between h-full max-w-3xl mx-auto">
-			<a href="#" class="p-1 font-bold text-lg"><i class="fas fa-feather-alt pr-2 text-sm"></i>WEATHER</a>
+				<a href="#" class="p-1 font-bold text-lg"><i class="fas fa-feather-alt pr-2 text-sm"></i>WEATHER</a>
 		</div>
 	</nav>
 	<div class="main-content grid grid-cols-6 gap-1 max-w-5xl mx-auto">
 
 		<div id="current" class="current mx-2 my-4 col-span-6"></div>
-		<div class="col-span-6 flex w-full mb-14 flex-wrap p-2 justify-start items-start">
-
-				<!--tabs-->
-			<div class="tabs w-full bg-opacity-40 bg-white" id="tab">
+		<div class=" col-span-6 flex w-full mb-14 flex-wrap p-2 justify-start items-start">
+					<!--tabs-->
+			<div class="tabs relative w-screen bg-opacity-20 bg-white" id="tab">
 				<button id="five" class="links bg-white bg-opacity-30 ">5 day</button>
 				<button id="eight" class="links bg-white bg-opacity-30 ">7 day</button>
 				<button id="hour" class="links bg-white bg-opacity-30 ">hourly</button>
 			</div>
-			<div class=" w-80 mb-8">
-					<!--content-->
-				<div class=" tab-content-wrapper pb-2 sm:mr-4">
-					<div id="fiveDay" class="content five py-2 px-3  h-full w-full grid grid-cols-1 justify-items-center bg-white bg-opacity-30 mt-2 rounded-xl"></div>
-					<div id="sevenDay" class="content eight hidden py-2 px-3  h-full w-full grid grid-cols-1 justify-items-center bg-white bg-opacity-30 mx-auto mt-2 rounded-xl"></div>
-					<div id="hourly" class="content hour hidden py-2 px-3  h-full w-full grid grid-cols-1 justify-items-center bg-white bg-opacity-30 mx-auto mt-2 rounded-xl"></div>
+			<div class=" w-96 mb-8">
+						<!--content-->
+				<div class=" tab-content-wrapper sm:mr-4">
+					<div id="fiveDay" class="relative z-10 content five py-2 px-3  h-full w-full grid grid-cols-1 justify-items-center bg-white bg-opacity-30 mt-2 rounded-xl"></div>
+					<div id="sevenDay" class="relative z-10 content eight hidden py-2 px-3  h-full w-full grid grid-cols-1 justify-items-center bg-white bg-opacity-30 mx-auto mt-2 rounded-xl"></div>
+					<div id="hourly" class="relative z-10 content hour hidden py-2 px-3  h-full w-full grid grid-cols-1 justify-items-center bg-white bg-opacity-30 mx-auto mt-2 rounded-xl"></div>
 				</div>
 			</div>
 
 			<div class="relative w-96 h-96 mt-2">
 				<div id='map' class="w-full h-full rounded-xl"></div>
-				<div id="geocoder" class="geocoder md:left-full md:top-0 md:ml-2"></div>
+				<div id="geocoder" class="geocoder lg:left-full lg:top-0 lg:ml-2"></div>
 			</div>
 		</div>
 	</div>
-	<!--		end tabs-->
-	<footer id="footer" class="mt-14 w-full h-16 bg-white bg-opacity-40 dark:text-gray-300">
-		<div class="text-right p-1">
+		<!--		end tabs-->
+	<footer id="footer" class="relative mt-14 w-full h-16 bg-white bg-opacity-40 dark:text-gray-300 z-10">
+		<div class="text-right p-2">
 			<input type="checkbox" id="toggle" class="checkbox"/>
 			<label for="toggle" class="switch"></label>
 		</div>
