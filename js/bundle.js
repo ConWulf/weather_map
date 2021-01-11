@@ -8,6 +8,7 @@ $(document).ready(function() {
     const tabContent = $(".cards");
     const tabs = $(".links");
     const cardArr = [ $("#fiveDay"), $("#sevenDay"), $("#hourly")];
+    const menu = $('#hamburger-btn');
     let hourlyId = 0;
     const bg = $('.main-bg');
     const mapOptions = {
@@ -37,7 +38,7 @@ $(document).ready(function() {
     const getLocalTime = (unix, tz) => {
         const milliseconds = unix * 1000;
         const date = moment.tz(milliseconds, tz).format('DD ddd ');
-        const exactTime = moment.tz(milliseconds, tz).format('HH:mm:ss z');
+        const exactTime = moment.tz(milliseconds, tz).format('LTS z');
         const id = moment.tz(milliseconds, tz).format('DD');
         const time = moment.tz(milliseconds, tz).format('HH:mm');
         return {
@@ -210,7 +211,6 @@ $(document).ready(function() {
                    locationArr.shift();
                if (locationArr[0].trim() === data.features[0].place_name.substring(0, data.features[0].place_name.indexOf(",")))
                    locationArr.shift();
-
                return locationArr.join(", ");
            });
     }
@@ -271,6 +271,12 @@ $(document).ready(function() {
     cardArr.forEach(el => {
         el.on('click', '.drop_down', {node: el}, dropDown);
     });
+
+    console.log(menu);
+    menu.on('click', function() {
+        $(this).children().toggleClass('bar-active bar-m--focus');
+        console.log($(this));
+    })
 
 });
 },{"moment-timezone":3}],2:[function(require,module,exports){

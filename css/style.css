@@ -43,6 +43,8 @@ body {
     z-index: 1;
     width: 50%;
     margin: 10px 10px 10px 0;
+    top: 0;
+    left: 10px
 }
 
 .mapboxgl-ctrl-geocoder--input {
@@ -154,5 +156,65 @@ nav, footer {
     transition: background-color 600ms ease-in-out;
 }
 
+.bar::before {
+    content: '';
+    display: inline-block;
+    position: absolute;
+    top: 12px;
+    right: 0;
+    transition: transform 300ms linear, top 300ms linear;
+    @apply h-1 w-full bg-white
+}
+
+.bar::after {
+    content: '';
+    display: inline-block;
+    position: absolute;
+    top: -12px;
+    right: 0;
+    transition: transform 300ms linear, top 300ms linear;
+    @apply h-1 w-full bg-white
+}
+
+.menu-btn {
+    @apply p-0.5 h-full w-full flex flex-col justify-center items-center relative
+}
+
+.menu-btn:focus {
+    @apply outline-none ring-1 ring-blue-400
+}
+
+.bar.bar-active::before {
+    content: '';
+    opacity: 1;
+    display: inline-block;
+    position: absolute;
+    top: 0;
+    right: 0;
+    transform: rotatez(45deg);
+    transform-origin: center center;
+    @apply h-1 w-full bg-white
+}
+
+.bar.bar-active::after {
+    content: '';
+    opacity: 1;
+    display: inline-block;
+    position: absolute;
+    top: 0;
+    right: 0;
+    transform: rotatez(-45deg);
+    transform-origin: center center;
+    @apply h-1 w-full bg-white
+}
+
+.bar {
+    transition: background-color 400ms linear;
+    @apply inline-block h-1 w-full bg-white relative
+}
+
+.bar.bar-m--focus {
+    @apply bg-opacity-0
+}
 
 @tailwind utilities;
