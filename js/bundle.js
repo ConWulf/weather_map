@@ -9,6 +9,7 @@ $(document).ready(function() {
     const tabs = $(".links");
     const cardArr = [ $("#fiveDay"), $("#sevenDay"), $("#hourly")];
     const menu = $('#hamburger-btn');
+    const nav = $('#nav');
     let hourlyId = 0;
     const bg = $('.main-bg');
     const mapOptions = {
@@ -29,7 +30,10 @@ $(document).ready(function() {
     }
 
     const geocoder = new MapboxGeocoder(geocodeOptions);
+    const navGeocoder = new MapboxGeocoder({marker: false, accessToken: mapboxKey,
+        mapboxgl: mapboxgl,});
     document.getElementById("geocoder").appendChild(geocoder.onAdd(map));
+    document.getElementById("nav-geocoder").appendChild(navGeocoder.onAdd(map));
 
     const marker = new mapboxgl.Marker({draggable: true})
         .setLngLat([-98.49, 29.42])
@@ -71,8 +75,8 @@ $(document).ready(function() {
             <p class="font-semibold">${description}</p>
             <p class="font-semibold">Feels Like ${feels_like}</p>
             <div class="text-xs font-medium">
-                <p class="float-left mr-3">Sunset ${getLocalTime(sunset, timezone).basicTime}</p>
-                <p>Sunrise ${getLocalTime(sunrise, timezone).basicTime}</p>
+                <p class="float-left mr-3">Sunset ${getLocalTime(sunset, timezone).time}</p>
+                <p>Sunrise ${getLocalTime(sunrise, timezone).time}</p>
             </div>
         </div>
     </div>`
@@ -113,7 +117,7 @@ $(document).ready(function() {
                         </ul>
                     </div>`
             }
-        })
+        });
         return html;
     }
 
@@ -205,12 +209,12 @@ $(document).ready(function() {
                let locationArr = data.features[0].place_name.match(/[^,]+/g);
                if(locationArr.length === 1 || locationArr.length === 2)
                    return locationArr.join('');
-               if(locationArr[locationArr.length - 1].trim() === data.features[data.features.length -1].place_name)
-                   locationArr.pop();
-               else if (locationArr[0].trim() === data.features[data.features.length -1].place_name)
-                   locationArr.shift();
-               if (locationArr[0].trim() === data.features[0].place_name.substring(0, data.features[0].place_name.indexOf(",")))
-                   locationArr.shift();
+               locationArr = locationArr.filter(e => {
+                   if (e.trim() !== data.features[data.features.length -1].place_name &&
+                       e.trim() !== data.features[0].place_name.substring(0, data.features[0].place_name.indexOf(","))) {
+                             return e
+                   }
+               });
                return locationArr.join(", ");
            });
     }
@@ -223,15 +227,14 @@ $(document).ready(function() {
 
     slider.on('click', function() {
         const sliderCheck = $('#toggle:checked');
-        if (sliderCheck.length === 1) {
-            html.addClass("dark");
-            bg.addClass('dark-bg');
+        html.toggleClass("dark");
+        bg.toggleClass('dark-bg');
+        $('.nav-geocoder .mapboxgl-ctrl-geocoder').toggleClass('dark');
+        if (sliderCheck.length === 1)
             map.setStyle("mapbox://styles/mapbox/navigation-preview-night-v4");
-        } else {
-            html.removeClass("dark");
-            bg.removeClass('dark-bg');
+        else
             map.setStyle("mapbox://styles/mapbox/navigation-preview-day-v4");
-        }
+
 
 
     });
@@ -272,11 +275,10 @@ $(document).ready(function() {
         el.on('click', '.drop_down', {node: el}, dropDown);
     });
 
-    console.log(menu);
     menu.on('click', function() {
         $(this).children().toggleClass('bar-active bar-m--focus');
-        console.log($(this));
-    })
+        nav.toggleClass('nav-expand max-h-14');
+    });
 
 });
 },{"moment-timezone":3}],2:[function(require,module,exports){

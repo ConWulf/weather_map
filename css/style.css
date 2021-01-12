@@ -11,11 +11,11 @@
 }
 
 .checkbox:checked + .switch {
-    @apply ring-1 ring-gray-600
+    @apply ring-2 ring-gray-400 bg-opacity-20 bg-gray-200 transition duration-500 ease-in-out
 }
 
 .switch {
-    @apply relative inline-block w-8 h-4 bg-white bg-opacity-40 ring-1 ring-gray-200 rounded-full
+    @apply relative inline-block w-8 h-4 bg-white bg-gray-500 bg-opacity-50 ring-2 ring-gray-700 rounded-full
 }
 
 .switch {
@@ -56,12 +56,42 @@ body {
     top: 9px;
 }
 
+.nav-geocoder .mapboxgl-ctrl-geocoder {
+    padding: 0;
+    height: 35px;
+    background-color: rgba(255, 255, 255, 0.7);
+    max-width: 170px;
+    transition: background-color 600ms ease-in-out;
+    @apply rounded-full
+}
+
+.nav-geocoder .mapboxgl-ctrl-geocoder--icon-search {
+    transition: color 600ms ease-in-out;
+    top: 8px;
+    left: 6px;
+    @apply dark:text-gray-100 text-gray-700 fill-current;
+}
+
+.nav-geocoder .mapboxgl-ctrl-geocoder.dark {
+    background-color: rgba(255, 255, 255, 0.3);
+}
+
+.nav-geocoder .mapboxgl-ctrl-geocoder--input {
+    padding: 0 2rem;
+    height: 35px;
+    @apply rounded-full placeholder-gray-700 dark:placeholder-gray-200
+}
+
+.nav-geocoder .mapboxgl-ctrl-geocoder--input::placeholder {
+    transition: color 600ms ease-in-out;
+}
+
 .tabs {
     @apply overflow-hidden bg-transparent flex
 }
 
 .tabs button {
-    transition: background-color 600ms ease-in-out;
+    transition: background-color 500ms ease-in-out;
     @apply float-left outline-none cursor-pointer px-4 py-1
 }
 
@@ -80,6 +110,10 @@ body {
 
 .tabs button:nth-child(3) {
     @apply border-r
+}
+
+.tabs button:nth-child(2) {
+    @apply border-l
 }
 
 .tab-content-wrapper::-webkit-scrollbar {
@@ -144,7 +178,7 @@ body {
 
 .cards-content {
     transition: box-shadow 600ms ease-in-out;
-    @apply relative p-2 w-full my-2 ring-2 ring-inset rounded-md ring-blue-600 dark:ring-gray-600
+    @apply relative p-2 w-full my-2 ring-2 ring-inset rounded-md ring-blue-600 dark:ring-gray-400
 }
 
 .current-weather-card {
@@ -163,7 +197,7 @@ nav, footer {
     top: 12px;
     right: 0;
     transition: transform 300ms linear, top 300ms linear;
-    @apply h-1 w-full bg-white
+    @apply h-1 w-full bg-white rounded
 }
 
 .bar::after {
@@ -173,7 +207,7 @@ nav, footer {
     top: -12px;
     right: 0;
     transition: transform 300ms linear, top 300ms linear;
-    @apply h-1 w-full bg-white
+    @apply h-1 w-full bg-white rounded
 }
 
 .menu-btn {
@@ -182,6 +216,10 @@ nav, footer {
 
 .menu-btn:focus {
     @apply outline-none ring-1 ring-blue-400
+}
+
+.menu-btn {
+    @apply rounded-lg
 }
 
 .bar.bar-active::before {
@@ -193,7 +231,7 @@ nav, footer {
     right: 0;
     transform: rotatez(45deg);
     transform-origin: center center;
-    @apply h-1 w-full bg-white
+    @apply h-1 w-full bg-white rounded
 }
 
 .bar.bar-active::after {
@@ -205,16 +243,26 @@ nav, footer {
     right: 0;
     transform: rotatez(-45deg);
     transform-origin: center center;
-    @apply h-1 w-full bg-white
+    @apply h-1 w-full bg-white rounded
 }
 
 .bar {
     transition: background-color 400ms linear;
-    @apply inline-block h-1 w-full bg-white relative
+    @apply inline-block h-1 w-full bg-white relative rounded
 }
 
 .bar.bar-m--focus {
     @apply bg-opacity-0
+}
+
+.nav-expand {
+    max-height: 16rem;
+
+}
+
+.nav {
+    transition: max-height 400ms linear;
+    @apply relative w-full bg-white bg-opacity-40 z-10 dark:bg-opacity-20  overflow-y-hidden
 }
 
 @tailwind utilities;

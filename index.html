@@ -12,14 +12,22 @@
 </head>
 <body class="w-screen h-screen overflow-x-hidden dark:text-gray-200">
 	<div class="main-bg absolute w-full h-full -z-10"></div>
-	<nav id="nav" class="relative h-14 w-full bg-white bg-opacity-40 z-10 dark:bg-opacity-20">
-		<div class="flex items-center justify-between h-full max-w-3xl mx-auto">
+	<nav id="nav" class="nav max-h-14">
+		<div class="flex mx-auto items-center justify-between h-full w-full max-w-3xl">
 			<a href="#" class="p-1 font-bold text-md"><i class="fas fa-feather-alt pr-2"></i>WEATHER</a>
-			<div class="menu m-1 p-1 w-11 h-11">
+			<div class="menu m-1 p-1 w-11 h-11 inline-block">
 				<button id="hamburger-btn" class="menu-btn ">
 					<span class="bar"></span>
 				</button>
 			</div>
+		</div>
+		<div class="p-3 ">
+			<div id="nav-geocoder" class="nav-geocoder p-2"></div>
+			<button class="lang-select p-2 ml-2">
+				<i class="fas fa-globe-asia"></i>
+				<span>US | °F</span>
+				<i class="fas fa-caret-down"></i>
+			</button>
 		</div>
 	</nav>
 	<div class="tabs relative w-screen bg-opacity-10 bg-white" id="tab">
