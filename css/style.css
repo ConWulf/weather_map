@@ -56,36 +56,6 @@ body {
     top: 9px;
 }
 
-.nav-geocoder .mapboxgl-ctrl-geocoder {
-    padding: 0;
-    height: 35px;
-    background-color: rgba(255, 255, 255, 0.7);
-    max-width: 170px;
-    transition: background-color 600ms ease-in-out;
-    @apply rounded-full
-}
-
-.nav-geocoder .mapboxgl-ctrl-geocoder--icon-search {
-    transition: color 600ms ease-in-out;
-    top: 8px;
-    left: 6px;
-    @apply dark:text-gray-100 text-gray-700 fill-current;
-}
-
-.nav-geocoder .mapboxgl-ctrl-geocoder.dark {
-    background-color: rgba(255, 255, 255, 0.3);
-}
-
-.nav-geocoder .mapboxgl-ctrl-geocoder--input {
-    padding: 0 2rem;
-    height: 35px;
-    @apply rounded-full placeholder-gray-700 dark:placeholder-gray-200
-}
-
-.nav-geocoder .mapboxgl-ctrl-geocoder--input::placeholder {
-    transition: color 600ms ease-in-out;
-}
-
 .tabs {
     @apply overflow-hidden bg-transparent flex
 }
@@ -186,7 +156,7 @@ body {
     @apply shadow-lg relative p-3 rounded-lg bg-white mx-auto bg-opacity-40 max-w-2xl text-sm dark:bg-opacity-20
 }
 
-nav, footer {
+footer {
     transition: background-color 600ms ease-in-out;
 }
 
@@ -223,24 +193,14 @@ nav, footer {
 }
 
 .bar.bar-active::before {
-    content: '';
-    opacity: 1;
-    display: inline-block;
-    position: absolute;
     top: 0;
-    right: 0;
     transform: rotatez(45deg);
     transform-origin: center center;
     @apply h-1 w-full bg-white rounded
 }
 
 .bar.bar-active::after {
-    content: '';
-    opacity: 1;
-    display: inline-block;
-    position: absolute;
     top: 0;
-    right: 0;
     transform: rotatez(-45deg);
     transform-origin: center center;
     @apply h-1 w-full bg-white rounded
@@ -261,8 +221,37 @@ nav, footer {
 }
 
 .nav {
-    transition: max-height 400ms linear;
-    @apply relative w-full bg-white bg-opacity-40 z-10 dark:bg-opacity-20  overflow-y-hidden
+    transition: max-height 400ms linear, background-color 600ms ease-in-out;
+    @apply relative w-full bg-white bg-opacity-40 z-30 dark:bg-opacity-20  overflow-y-hidden
+}
+
+.search-icon {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    transition: transform 600ms linear, left 600ms linear;
+    /*@apply transition-transform duration-700 ease-in-out;*/
+}
+
+.search-icon.rotate {
+    left: 174px;
+    transform: rotate(359deg);
+}
+
+.search-placeholder {
+    top: 10px;
+    left: 50px;
+}
+
+.search {
+    transition: width 600ms linear;
+}
+.search.expand {
+    @apply w-48
+}
+
+.search:focus {
+    @apply w-48
 }
 
 @tailwind utilities;

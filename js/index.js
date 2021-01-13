@@ -9,7 +9,10 @@ $(document).ready(function() {
     const cardArr = [ $("#fiveDay"), $("#sevenDay"), $("#hourly")];
     const menu = $('#hamburger-btn');
     const nav = $('#nav');
+    const closeBtn = $('#close-overlay');
+    const search = $('#search');
     let hourlyId = 0;
+    let menuBtnClicked = false;
     const bg = $('.main-bg');
     const mapOptions = {
         container: 'map',
@@ -29,10 +32,7 @@ $(document).ready(function() {
     }
 
     const geocoder = new MapboxGeocoder(geocodeOptions);
-    const navGeocoder = new MapboxGeocoder({marker: false, accessToken: mapboxKey,
-        mapboxgl: mapboxgl,});
     document.getElementById("geocoder").appendChild(geocoder.onAdd(map));
-    document.getElementById("nav-geocoder").appendChild(navGeocoder.onAdd(map));
 
     const marker = new mapboxgl.Marker({draggable: true})
         .setLngLat([-98.49, 29.42])
@@ -193,18 +193,17 @@ $(document).ready(function() {
                    elem.html(renderFutureWeather(weatherData)[elem.attr('id')]);
             });
             cardArr[2].html(renderHourly(weatherData));
-            geocode(lng, lat).then(locationData => {
+            reverseGeocode(lng, lat).then(locationData => {
                 overviewCard.html(renderCurrentWeather(weatherData, locationData));
             })
         });
     }
     init(-98.49, 29.42)
 
-    function geocode(long, lat) {
+    function reverseGeocode(long, lat) {
        return fetch (`https://api.mapbox.com/geocoding/v5/mapbox.places/${long}, ${lat}.json?access_token=${mapboxKey}`)
            .then(res => res.json())
            .then(data => {
-               console.log(data);
                let locationArr = data.features[0].place_name.match(/[^,]+/g);
                if(locationArr.length === 1 || locationArr.length === 2)
                    return locationArr.join('');
@@ -277,6 +276,46 @@ $(document).ready(function() {
     menu.on('click', function() {
         $(this).children().toggleClass('bar-active bar-m--focus');
         nav.toggleClass('nav-expand max-h-14');
+        closeBtn.toggleClass('hidden');
+        menuBtnClicked = true;
     });
 
+    closeBtn.on('click', function() {
+       menu.children().toggleClass('bar-active bar-m--focus');
+        nav.toggleClass('nav-expand max-h-14');
+        closeBtn.toggleClass('hidden');
+        $('#search-icon').removeClass('rotate');
+        search.removeClass('expand');
+        $('.search-placeholder').addClass('opacity-0');
+        menuBtnClicked = false;
+    })
+
+    search.on('input', function() {
+        if ($(this).val().length >= 1)
+            $('.search-placeholder').addClass('hidden');
+        else
+            $('.search-placeholder').removeClass('hidden');
+    });
+
+    search.on('click', function(){
+        if (!menuBtnClicked)
+            closeBtn.toggleClass('hidden');
+    });
+
+    $('#nav-geocoder').hover(function() {
+        $('#search-icon').addClass('rotate');
+        search.addClass('expand');
+         $('.search-placeholder').removeClass('opacity-0');
+    }, function() {
+        if (!search.is(':focus')) {
+            $('#search-icon').removeClass('rotate');
+            search.removeClass('expand');
+            $('.search-placeholder').addClass('opacity-0');
+        }
+    });
+
+
+
+
+// fetch(`https://api.mapbox.com/geocoding/v5/mapbox.places/dal.json?&access_token=${mapboxKey}`).then(res => res.json().then(console.log));
 });
