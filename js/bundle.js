@@ -2,19 +2,16 @@
 
     const moment = require('moment-timezone');
 $(document).ready(function() {
-    const html = $('html');
-    const slider = $('#toggle');
+    const slider = [ $('#toggle'), $('#nav--toggle') ];
     const overviewCard = $("#current");
     const tabContent = $(".cards");
     const tabs = $(".links");
-    const cardArr = [ $("#fiveDay"), $("#sevenDay"), $("#hourly")];
+    const cardArr = [$("#fiveDay"), $("#sevenDay"), $("#hourly")];
     const menu = $('#hamburger-btn');
-    const nav = $('#nav');
     const closeBtn = $('#close-overlay');
-    const search = $('#search');
+    const search = [$('#search'), $('#side-bar-search')]
+    const langSelect = [$('#nav-lang-select'), $('#side-nav-select')];
     let hourlyId = 0;
-    let menuBtnClicked = false;
-    const bg = $('.main-bg');
     const mapOptions = {
         container: 'map',
         center: [-98.49, 29.42], // starting position [lng, lat]
@@ -24,16 +21,6 @@ $(document).ready(function() {
     }
     mapboxgl.accessToken = mapboxKey;
     const map = new mapboxgl.Map(mapOptions);
-
-    const geocodeOptions = {
-        accessToken: mapboxKey,
-        mapboxgl: mapboxgl,
-        marker: false,
-        collapsed: true
-    }
-
-    const geocoder = new MapboxGeocoder(geocodeOptions);
-    document.getElementById("geocoder").appendChild(geocoder.onAdd(map));
 
     const marker = new mapboxgl.Marker({draggable: true})
         .setLngLat([-98.49, 29.42])
@@ -78,21 +65,21 @@ $(document).ready(function() {
         } = weatherObj;
         getLocalTime(dt, timezone);
         return `<div id="currentCard" class="current-weather-card">
-        <div class="flex flex-col">
-        <h3 class="text-lg w-9/12" id="location">${location}</h3>
-        <h3>as of ${getLocalTime(dt, timezone).exactTime}</h3>
-            <div>
-                <p class="right-0 top-0 absolute"><img src="http://openweathermap.org/img/wn/${icon}@2x.png" alt="weather icon" class="w-20"></p>
-                <p class="font-bold text-xl">${temp} °</p>
+            <div class="flex flex-col">
+                <h3 class="text-lg w-9/12" id="location">${location}</h3>
+                <h3>as of ${getLocalTime(dt, timezone).exactTime}</h3>
+                <div>
+                    <p class="right-0 top-0 absolute"><img src="http://openweathermap.org/img/wn/${icon}@2x.png" alt="weather icon" class="w-20"></p>
+                    <p class="font-bold text-xl">${temp} °</p>
+                </div>
+                <p class="font-semibold">${description}</p>
+                <p class="font-semibold">Feels Like ${feels_like}</p>
+                <div class="text-xs font-medium">
+                    <p class="float-left mr-3">Sunset ${getLocalTime(sunset, timezone).time}</p>
+                    <p>Sunrise ${getLocalTime(sunrise, timezone).time}</p>
+                </div>
             </div>
-            <p class="font-semibold">${description}</p>
-            <p class="font-semibold">Feels Like ${feels_like}</p>
-            <div class="text-xs font-medium">
-                <p class="float-left mr-3">Sunset ${getLocalTime(sunset, timezone).time}</p>
-                <p>Sunrise ${getLocalTime(sunrise, timezone).time}</p>
-            </div>
-        </div>
-    </div>`
+        </div>`
     }
 
     const renderHourly = (weatherObj) => {
@@ -235,21 +222,24 @@ $(document).ready(function() {
         const lng = marker.getLngLat().lng;
         const lat = marker.getLngLat().lat;
         init(lng, lat);
-    })
+    });
 
-    slider.on('click', function() {
+    function toggleDarkMode() {
         const sliderCheck = $('#toggle:checked');
-        html.toggleClass("dark");
-        bg.toggleClass('dark-bg');
+        $('html').toggleClass("dark");
+        $('.main-bg').toggleClass('dark-bg');
         $('.nav-geocoder .mapboxgl-ctrl-geocoder').toggleClass('dark');
         if (sliderCheck.length === 1)
             map.setStyle("mapbox://styles/mapbox/navigation-preview-night-v4");
         else
             map.setStyle("mapbox://styles/mapbox/navigation-preview-day-v4");
+    }
 
-
-
+    slider.forEach(toggle => {
+        toggle.on('click', toggleDarkMode);
     });
+
+
 
     function showTabContent () {
         for (const content of tabContent) {
@@ -289,47 +279,49 @@ $(document).ready(function() {
 
     menu.on('click', function() {
         $(this).children().toggleClass('bar-active bar-m--focus');
-        nav.toggleClass('nav-expand max-h-16');
-        closeBtn.toggleClass('hidden');
-        menuBtnClicked = true;
+        $('#side-menu').toggleClass('-right-full right-0');
     });
 
     closeBtn.on('click', function() {
-       menu.children().toggleClass('bar-active bar-m--focus');
-        nav.toggleClass('nav-expand max-h-16');
+       menu.children().removeClass('bar-active bar-m--focus');
         closeBtn.toggleClass('hidden');
         $('#search-icon').removeClass('rotate');
-        search.removeClass('expand');
-        $('.search-placeholder').addClass('opacity-0');
-        menuBtnClicked = false;
-    })
-
-    search.on('input', function() {
-        if ($(this).val().length >= 1)
-            $('.search-placeholder').addClass('hidden');
-        else
-            $('.search-placeholder').removeClass('hidden');
+        search[0].removeClass('expand');
+        $('.nav-geocoder .search-placeholder').addClass('opacity-0');
     });
 
-    search.on('click', function(){
-        if (!menuBtnClicked)
+    function placeholder() {
+        if ($(this).val().length >= 1) $('.search-placeholder').addClass('hidden');
+        else $('.search-placeholder').removeClass('hidden');
+    }
+
+    search.forEach(bar => {
+        bar.on('input', placeholder)
+    });
+
+    search[0].on('click', function(){
             closeBtn.removeClass('hidden');
     });
 
     $('#nav-geocoder').hover(function() {
         $('#search-icon').addClass('rotate');
-        search.addClass('expand');
+        search[0].addClass('expand');
          $('.search-placeholder').removeClass('opacity-0');
     }, function() {
-        if (!search.is(':focus')) {
+        if (!search[0].is(':focus')) {
             $('#search-icon').removeClass('rotate');
-            search.removeClass('expand');
+            search[0].removeClass('expand');
             $('.search-placeholder').addClass('opacity-0');
         }
     });
 
+    function langMenuExpande () {
+        $('.lang-select').toggleClass('max-h-0 p-2 max-h-52');
+    }
 
-
+    langSelect.forEach(btn => {
+        btn.on('click', langMenuExpande);
+    })
 
 // fetch(`https://api.mapbox.com/geocoding/v5/mapbox.places/dal.json?&access_token=${mapboxKey}`).then(res => res.json().then(console.log));
 });

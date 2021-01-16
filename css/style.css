@@ -11,15 +11,12 @@
 }
 
 .checkbox:checked + .switch {
-    @apply ring-2 ring-gray-400 bg-opacity-20 bg-gray-200 transition duration-500 ease-in-out
+    @apply ring-2 ring-gray-100 bg-opacity-20
 }
 
 .switch {
-    @apply relative inline-block w-8 h-4 bg-white bg-gray-500 bg-opacity-50 ring-2 ring-gray-700 rounded-full
-}
-
-.switch {
-    transition: box-shadow 600ms ease-in-out ;
+    transition: box-shadow 600ms ease-in-out, background-color 200ms ease-in-out;
+    @apply relative inline-block w-8 h-4 bg-gray-200 bg-opacity-50 ring-2 ring-gray-700 rounded-full
 }
 
 body {
@@ -32,10 +29,10 @@ body {
     width: .75rem;
     height: .75rem;
     border-radius: 50%;
-    background-color: white;
     top: .1rem;
     left: .1rem;
-    transition: left 500ms ease-in-out;
+    transition: left 500ms ease-in-out, background-color 500ms ease-in-out;
+    @apply bg-gray-700 dark:bg-gray-200
 }
 
 .geocoder {
@@ -166,8 +163,8 @@ footer {
     position: absolute;
     top: 12px;
     right: 0;
-    transition: transform 300ms linear, top 300ms linear;
-    @apply h-1 w-full bg-white rounded
+    transition: transform 200ms linear, top 200ms linear, background-color 300ms linear;
+    @apply h-1 w-full bg-gray-900 rounded dark:bg-gray-300
 }
 
 .bar::after {
@@ -176,8 +173,8 @@ footer {
     position: absolute;
     top: -12px;
     right: 0;
-    transition: transform 300ms linear, top 300ms linear;
-    @apply h-1 w-full bg-white rounded
+    transition: transform 200ms linear, top 200ms linear, background-color 300ms linear;
+    @apply h-1 w-full rounded bg-gray-900 dark:bg-gray-300
 }
 
 .menu-btn {
@@ -196,46 +193,39 @@ footer {
     top: 0;
     transform: rotatez(45deg);
     transform-origin: center center;
-    @apply h-1 w-full bg-white rounded
 }
 
 .bar.bar-active::after {
     top: 0;
     transform: rotatez(-45deg);
     transform-origin: center center;
-    @apply h-1 w-full bg-white rounded
 }
 
 .bar {
     transition: background-color 400ms linear;
-    @apply inline-block h-1 w-full bg-white relative rounded
+    @apply inline-block h-1 w-full bg-gray-900 relative rounded dark:bg-gray-300
 }
 
 .bar.bar-m--focus {
     @apply bg-opacity-0
 }
 
-.nav-expand {
-    max-height: 16rem;
-
-}
-
 .nav {
     transition: max-height 400ms linear, background-color 600ms ease-in-out;
-    @apply relative w-full bg-white bg-opacity-40 z-30 dark:bg-opacity-20  overflow-y-hidden sm:overflow-y-visible
+    @apply relative w-full z-30 dark:bg-opacity-20
 }
+
 
 .search-icon {
     position: absolute;
     top: 10px;
-    left: 10px;
-    transition: transform 600ms linear, left 600ms linear;
-    /*@apply transition-transform duration-700 ease-in-out;*/
+    right: 10px;
+    transition: transform 600ms linear, right 600ms linear;
 }
 
 .search-icon.rotate {
-    left: 174px;
-    transform: rotate(359deg);
+    right: 190px;
+    transform: rotate(-359deg);
 }
 
 .search-placeholder {
@@ -247,11 +237,19 @@ footer {
     transition: width 600ms linear;
 }
 .search.expand {
-    @apply w-48
+    @apply w-52
 }
 
 .search:focus {
-    @apply w-48
+    @apply w-52
+}
+
+.side-menu {
+    transition: right 500ms ease-in-out, background-color 400ms ease-in-out;
+}
+
+.lang-select {
+    transition: background-color 400ms ease-in-out, max-height 400ms linear, padding 400ms linear;
 }
 
 @tailwind utilities;
