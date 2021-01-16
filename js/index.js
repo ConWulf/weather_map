@@ -38,12 +38,23 @@ $(document).ready(function() {
         .setLngLat([-98.49, 29.42])
         .addTo(map);
 
+    const convertTime = (time) => {
+        let hours = parseInt(time.substr(0, time.indexOf(':')))
+        if (hours === 0) return time;
+        else if (hours > 12) {
+            hours %= 12
+            return hours + time.slice(time.indexOf(':'));
+        } else return time;
+    }
+
     const getLocalTime = (unix, tz) => {
         const milliseconds = unix * 1000;
         const date = moment.tz(milliseconds, tz).format('DD ddd ');
-        const exactTime = moment.tz(milliseconds, tz).format('LTS z');
+        let exactTime = moment.tz(milliseconds, tz).format('LTS z');
         const id = moment.tz(milliseconds, tz).format('DD');
-        const time = moment.tz(milliseconds, tz).format('HH:mm');
+        let time = moment.tz(milliseconds, tz).format('HH:mm');
+        // exactTime = convertTime(exactTime);
+        // time = convertTime(time);
         return {
             date,
             time,
@@ -51,6 +62,8 @@ $(document).ready(function() {
             exactTime
         };
     }
+
+
 
     const renderCurrentWeather = (weatherObj, location) => {
         let {current: {temp,
@@ -137,7 +150,7 @@ $(document).ready(function() {
                 fiveDay += `<div class="cards-content">
                         <div class="text-sm">
                            <div class="mr-3">${getLocalTime(dt, timezone).date}</div>
-                            <div>${max}/${min} </div>
+                            <div>${max}/${min} °F </div>
                             <div class=" absolute right-5 top-0 flex flex-row-reverse items-center">
                                 <img src="http://openweathermap.org/img/wn/${icon}.png" alt="weather icon">
                                 <div>${description}</div>
@@ -147,10 +160,10 @@ $(document).ready(function() {
                             </button>         
                         </div>
                         <ul class="slideup ${getLocalTime(dt, timezone).id}">
-                            <li class="">${humidity}</li>
-                            <li class="">${uvi}</li>
-                            <li class="">${wind_speed}</li>
-                            <li class="">${wind_deg}</li>
+                            <li class="">Humidity: ${humidity}%</li>
+                            <li class="">uvi: ${uvi}</li>
+                            <li class="">Wind Speed: ${wind_speed} mph</li>
+                            <li class="">Wind Direction: ${wind_deg}</li>
                         </ul>
                     </div>`
             if (i > 0)
@@ -167,10 +180,10 @@ $(document).ready(function() {
                             </button>         
                         </div>
                         <ul class="slideup ${getLocalTime(dt, timezone).id}">
-                            <li class="">${humidity}</li>
-                            <li class="">${uvi}</li>
-                            <li class="">${wind_speed}</li>
-                            <li class="">${wind_deg}</li>
+                            <li class="">Humidity: ${humidity}%</li>
+                            <li class="">uvi: ${uvi}</li>
+                            <li class="">Wind Speed: ${wind_speed} mph</li>
+                            <li class="">Wind Direction: ${wind_deg}</li>
                         </ul>
                     </div>`
         });
@@ -275,14 +288,14 @@ $(document).ready(function() {
 
     menu.on('click', function() {
         $(this).children().toggleClass('bar-active bar-m--focus');
-        nav.toggleClass('nav-expand max-h-14');
+        nav.toggleClass('nav-expand max-h-16');
         closeBtn.toggleClass('hidden');
         menuBtnClicked = true;
     });
 
     closeBtn.on('click', function() {
        menu.children().toggleClass('bar-active bar-m--focus');
-        nav.toggleClass('nav-expand max-h-14');
+        nav.toggleClass('nav-expand max-h-16');
         closeBtn.toggleClass('hidden');
         $('#search-icon').removeClass('rotate');
         search.removeClass('expand');
@@ -299,7 +312,7 @@ $(document).ready(function() {
 
     search.on('click', function(){
         if (!menuBtnClicked)
-            closeBtn.toggleClass('hidden');
+            closeBtn.removeClass('hidden');
     });
 
     $('#nav-geocoder').hover(function() {

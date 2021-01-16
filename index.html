@@ -11,9 +11,11 @@
 	<title>Weather map</title>
 </head>
 <body class="w-screen h-screen overflow-x-hidden dark:text-gray-200">
-<div id="close-overlay" class="w-full h-full absolute z-20 hidden"></div>
+<div id="close-overlay" class="w-full h-full absolute bg-black bg-opacity-50 z-30 hidden"></div>
+
 	<div class="main-bg absolute w-full h-full -z-10"></div>
-	<nav id="nav" class="nav max-h-14 sm:flex sm:justify-around sm:items-center">
+
+	<nav id="nav" class="nav max-h-16 sm:flex sm:justify-around sm:items-center">
 		<div class="flex mx-auto items-center justify-between h-full max-w-3xl sm:inline-flex sm:mx-0">
 			<a href="#" class="p-1 font-bold text-md"><i class="fas fa-feather-alt pr-2"></i>WEATHER</a>
 			<div class="menu m-1 p-1 w-11 h-11 inline-block sm:hidden">
@@ -25,18 +27,26 @@
 		<div class="p-3 sm:flex sm:p-0 sm:flex-row-reverse items-center justify-end sm:w-80">
 			<div id="nav-geocoder" class="nav-geocoder p-2 relative overflow-x-hidden inline-block">
 					<label for="search" class="absolute search-placeholder opacity-0 transition-opacity duration-700">Search</label>
-					<input id="search" type="text" autocomplete="off" class="search rounded-full h-7 w-10 bg-transparent ring ring-gray-200 focus:outline-none pl-10 pr-2">
+					<input id="search" type="text" autocomplete="off" class="search rounded-full h-7 w-10 bg-transparent ring ring-gray-200 focus:outline-none pl-10 pr-4">
 					<div id="search-icon" class="search-icon w-6 h-6 rounded-full bg-gray-400 flex items-center justify-center text-sm"><i class="fas fa-search"></i></div>
 			</div>
-			<button class="lang-select block p-0.5 ml-2 h-10 focus:outline-none rounded-lg focus:ring focus:ring-gray-500 dark:focus:ring-gray-300 mt-1">
-				<i class="fas fa-globe-asia"></i>
-				<span>US | °F</span>
-				<i class="fas fa-caret-down"></i>
-			</button>
+				<button class="lang-select block p-0.5 h-8 focus:outline-none rounded-lg focus:ring focus:ring-gray-500 dark:focus:ring-gray-300 ">
+					<i class="fas fa-globe-asia"></i>
+					<span>US | °F</span>
+					<i class="fas fa-caret-down"></i>
+				</button>
 		</div>
 	</nav>
-	<div class="tabs relative w-screen bg-opacity-10 bg-white" id="tab">
-		<div class="w-9/12 mx-auto">
+	<div class="relative ">
+		<div class="absolute z-10 w-full bg-gray-200 text-lg p-2 z-40 opacity-0">
+			<button class="dark:text-gray-700">°C</button>
+			<span class="dark:text-gray-700">|</span>
+			<button class="text-indigo-800">°F</button>
+		</div>
+	</div>
+
+	<div class="tabs z-50 relative w-screen bg-opacity-10 bg-white" id="tab">
+		<div class="w-10/12 mx-auto ">
 			<button id="five" class="links bg-white bg-opacity-40 dark:bg-opacity-20">5 day</button>
 			<button id="eight" class="links bg-white bg-opacity-40 dark:bg-opacity-20">7 day</button>
 			<button id="hour" class="links bg-white bg-opacity-40 dark:bg-opacity-20">hourly</button>

@@ -57,20 +57,20 @@ body {
 }
 
 .tabs {
-    @apply overflow-hidden bg-transparent flex
+    @apply overflow-hidden bg-transparent flex z-10
 }
 
 .tabs button {
-    transition: background-color 500ms ease-in-out;
+    transition: background-color 400ms ease-in-out;
     @apply float-left outline-none cursor-pointer px-4 py-1
 }
 
 .tabs button:hover {
-    @apply bg-opacity-0
+    @apply bg-opacity-10
 }
 
 .tabs button.clicked {
-    @apply bg-opacity-10 ring-2 ring-inset ring-blue-600
+    @apply bg-opacity-0 ring-2 ring-inset ring-blue-600
 }
 
 
@@ -148,7 +148,7 @@ body {
 
 .cards-content {
     transition: box-shadow 600ms ease-in-out;
-    @apply relative p-2 w-full my-2 ring-2 ring-inset rounded-md ring-blue-600 dark:ring-gray-400
+    @apply relative p-2 w-full my-0.5 ring-2 ring-inset rounded-md ring-blue-600 dark:ring-gray-400
 }
 
 .current-weather-card {
@@ -222,7 +222,7 @@ footer {
 
 .nav {
     transition: max-height 400ms linear, background-color 600ms ease-in-out;
-    @apply relative w-full bg-white bg-opacity-40 z-30 dark:bg-opacity-20  overflow-y-hidden
+    @apply relative w-full bg-white bg-opacity-40 z-30 dark:bg-opacity-20  overflow-y-hidden sm:overflow-y-visible
 }
 
 .search-icon {
