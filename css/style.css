@@ -35,24 +35,6 @@ body {
     @apply bg-gray-700 dark:bg-gray-200
 }
 
-.geocoder {
-    position: absolute;
-    z-index: 1;
-    width: 50%;
-    margin: 10px 10px 10px 0;
-    top: 0;
-    left: 10px
-}
-
-.mapboxgl-ctrl-geocoder--input {
-    padding: 0 3rem;
-    height: 40px;
-}
-
-.mapboxgl-ctrl-geocoder--icon-search {
-    top: 9px;
-}
-
 .tabs {
     @apply overflow-hidden bg-transparent flex z-10
 }
@@ -106,7 +88,7 @@ body {
 
 .cards {
     transition: box-shadow 600ms ease-in-out, background-color 600ms ease-in-out;
-    @apply relative z-10 h-full w-full p-1 grid grid-cols-1 justify-items-center bg-indigo-300 bg-opacity-40 mt-2 rounded-xl dark:bg-opacity-20
+    @apply relative z-10 h-full w-full p-1 grid grid-cols-1 justify-items-center bg-green-700 bg-opacity-40 mt-2 rounded-xl dark:bg-opacity-20
 }
 
 .drop_down-btn {
@@ -143,7 +125,7 @@ body {
 
 .current-weather-card {
     transition: background-color 600ms ease-in-out;
-    @apply shadow-lg relative p-3 rounded-lg bg-pink-300 mx-auto bg-opacity-40 max-w-2xl text-sm dark:bg-opacity-20
+    @apply shadow-lg relative p-3 rounded-lg bg-green-700 mx-auto bg-opacity-40 max-w-2xl text-sm dark:bg-opacity-20
 }
 
 footer {
@@ -242,7 +224,15 @@ footer {
 }
 
 .lang-select {
-    transition: background-color 400ms ease-in-out, max-height 400ms linear, padding 400ms linear;
+    transition: background-color 400ms ease-in-out, max-height 400ms linear, padding 400ms linear, right 500ms ease-in-out;
+}
+
+.suggestion {
+    @apply p-2 cursor-pointer
+}
+
+.suggestion:hover {
+    @apply bg-blue-300 dark:bg-blue-700
 }
 
 @tailwind utilities;

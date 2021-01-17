@@ -219,6 +219,24 @@ $(document).ready(function () {
             });
     }
 
+    const geocode = (input) => {
+        fetch(`https://api.mapbox.com/geocoding/v5/mapbox.places/${input}.json?&access_token=${mapboxKey}`)
+            .then(res => res.json())
+            .then(data => {
+                console.log(data);
+                data.features.forEach(feature => {
+                    const {place_name, center} = feature;
+                    $('#suggestion-list').append(`<li data-coordinate="${center}" class="suggestion">${place_name}</li>`);
+                })
+            })
+    }
+
+    geocode('dal');
+
+    $('#suggestion-list').on('click', '.suggestion', function() {
+        console.log($(this).data('coordinate'));
+    });
+
     marker.on('dragend', function () {
         const lng = marker.getLngLat().lng;
         const lat = marker.getLngLat().lat;
@@ -283,20 +301,19 @@ $(document).ready(function () {
         $(this).children().toggleClass('bar-active bar-m--focus');
         $('#side-menu').toggleClass('-right-full right-0');
         langSelect.addClass('max-h-0');
-        langSelect.removeClass('p-2 max-h-52');
+        langSelect.removeClass('p-3 max-h-full');
+        langSelect.toggleClass('-right-full right-0');
     });
 
     closeBtn.on('click', function () {
         const langSelect = $('.lang-select')
-        const dropMenu = $('#side-menu')
         closeBtn.toggleClass('hidden');
         $('#search-icon').removeClass('rotate');
         search[0].removeClass('expand');
         $('.nav-geocoder .search-placeholder').addClass('opacity-0');
         langSelect.addClass('max-h-0');
-        langSelect.removeClass(' p-3 max-h-80');
-        dropMenu.addClass('sm:max-h-0');
-        dropMenu.removeClass('sm:max-h-80');
+        langSelect.removeClass(' p-3 max-h-full');
+        $('.arrow').removeClass('transform rotate-180');
     });
 
     function placeholder() {
@@ -309,6 +326,9 @@ $(document).ready(function () {
     });
 
     search[0].on('click', function () {
+        const langSelect = $('.lang-select');
+        langSelect.addClass('max-h-0');
+        langSelect.removeClass(' p-3 max-h-full');
         closeBtn.removeClass('hidden');
     });
 
@@ -325,8 +345,8 @@ $(document).ready(function () {
     });
 
     function langMenuExpand() {
-        $('.lang-select').toggleClass('max-h-0 max-h-80 p-3');
-        $('#side-menu').toggleClass('sm:max-h-0 sm:max-h-80');
+        $('.lang-select').toggleClass('max-h-0 max-h-full p-3');
+        $('.arrow').toggleClass('transform rotate-180');
     }
 
     langSelect.forEach(btn => {
@@ -334,8 +354,9 @@ $(document).ready(function () {
     });
 
     langSelect[0].on('click', function () {
-        closeBtn.removeClass('hidden');
+        closeBtn.toggleClass('hidden');
     });
 
-// fetch(`https://api.mapbox.com/geocoding/v5/mapbox.places/dal.json?&access_token=${mapboxKey}`).then(res => res.json().then(console.log));
+
+
 });
