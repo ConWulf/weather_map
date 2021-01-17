@@ -5,125 +5,119 @@
 	<meta name="viewport"
 		  content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
 	<meta http-equiv="X-UA-Compatible" content="ie=edge">
-	<link href='https://api.mapbox.com/mapbox-gl-js/v2.0.0/mapbox-gl.css' rel='stylesheet' />
-	<link rel='stylesheet' href='https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-geocoder/v4.2.0/mapbox-gl-geocoder.css' type='text/css' />
+	<link href='https://api.mapbox.com/mapbox-gl-js/v2.0.0/mapbox-gl.css' rel='stylesheet'/>
+	<link rel='stylesheet'
+		  href='https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-geocoder/v4.2.0/mapbox-gl-geocoder.css'
+		  type='text/css'/>
 	<link rel="stylesheet" href="build/style.css">
 	<title>Weather map</title>
 </head>
-	<body class="w-screen h-screen overflow-x-hidden dark:text-gray-200">
-		<div id="close-overlay" class="w-full h-full absolute bg-black bg-opacity-10 z-30 hidden"></div>
+<body class="w-screen h-screen overflow-x-hidden dark:text-gray-200">
+<div id="close-overlay" class="w-full h-full absolute bg-black bg-opacity-10 z-30 hidden"></div>
 
-		<div class="main-bg absolute w-full h-full -z-10"></div>
+<div class="main-bg absolute w-full h-full -z-10"></div>
 
-		<nav id="nav" class="nav">
-			<div class="flex justify-between items-center max-w-3xl mx-auto">
-				<div class="flex items-center justify-between h-full w-full sm:w-auto sm:mx-0 z-20 flex-grow">
-					<a href="#" class="p-1 font-bold text-md mx-2"><i class="fas fa-feather-alt pr-2"></i>WEATHER</a>
-				</div>
-				<div class="menu m-1 p-1 w-11 h-11 inline-block z-20 sm:hidden">
-					<button id="hamburger-btn" class="menu-btn ">
-						<span class="bar"></span>
-					</button>
-				</div>
-				<button id="nav-lang-select" class="lang-select--btn block m-2 p-1 focus:outline-none rounded-lg focus:ring focus:ring-gray-300 dark:focus:ring-gray-600 hidden sm:block">
-					<i class="fas fa-globe-asia"></i>
-					<span>US | °F</span>
-					<i class="fas fa-caret-down"></i>
-				</button>
-				<div id="nav-geocoder" class="nav-geocoder mx-2 p-2 relative self-start overflow-x-hidden inline-block z-20 hidden sm:block">
-					<label for="search" class="absolute search-placeholder opacity-0 transition-opacity duration-700">Search</label>
-					<input id="search" type="text" autocomplete="off" class="search rounded-full h-7 w-10 bg-transparent ring ring-gray-200 focus:outline-none pl-10 pr-4">
-					<div id="search-icon" class="search-icon w-6 h-6 rounded-full bg-gray-400 flex items-center justify-center text-sm"><i class="fas fa-search"></i></div>
-				</div>
-			</div>
-		</nav>
-
-		<div class="lang-select absolute bg-gray-400 dark:bg-gray-900 w-full hidden sm:block z-30 right-0 max-h-0 overflow-y-hidden">
-			<div class="text-xl flex p-2 grid grid-cols-2">
-				<div class="p-1">
-					<button class=" focus-within:outline-none">°C</button>
-					<span class=" ">|</span>
-					<button class="text-pink-700 focus-within:outline-none">°F</button>
-				</div>
-				<div class="text-right p-2 flex justify-end items-center">
-					<p class="text-sm inline mx-1">Dark Mode</p>
-					<input type="checkbox" id="nav--toggle" class="checkbox"/>
-					<label for="nav--toggle" class="switch text-sm"></label>
-				</div>
-			</div>
-			<ul>
-				<li>AMERICAS</li>
-				<li>EUROPE</li>
-				<li>AFRICA</li>
-				<li>ASIA PACIFIC</li>
-				<li>MIDDLE EAST</li>
-			</ul>
+<nav id="nav" class="nav">
+	<div class="flex justify-between items-center max-w-3xl mx-auto">
+		<div class="flex items-center justify-between h-full w-full sm:w-auto sm:mx-0 z-20 flex-grow">
+			<a href="#" class="p-1 font-bold text-md mx-2"><i class="fas fa-feather-alt pr-2"></i>WEATHER</a>
 		</div>
-
-		<div id="side-menu" class="side-menu absolute z-20 p-10 h-screen w-full bg-gray-200 flex flex-col items-center top-0 sm:hidden -right-full dark:bg-gray-700">
-			<button id="side-nav-select" class="lang-select--btn block m-2 p-1 focus:outline-none rounded-lg focus:ring focus:ring-gray-500 dark:focus:ring-gray-300 ">
-				<i class="fas fa-globe-asia"></i>
-				<span>US | °F</span>
-				<i class="fas fa-caret-down"></i>
+		<div class="menu m-1 p-1 w-11 h-11 inline-block z-20 sm:hidden">
+			<button id="hamburger-btn" class="menu-btn ">
+				<span class="bar"></span>
 			</button>
-			<div class="lang-select relative w-full bg-gray-400 dark:bg-gray-900 max-h-0 overflow-y-hidden">
-				<div class="text-xl flex p-2 grid grid-cols-2">
-					<div class="p-1">
-						<button class="focus-within:outline-none">°C</button>
-						<span class=" ">|</span>
-						<button class="text-pink-700 focus-within:outline-none">°F</button>
-					</div>
-					<div class="text-right p-2">
-						<input type="checkbox" id="toggle" class="checkbox"/>
-						<label for="toggle" class="switch text-sm"></label>
-						<p class="text-sm">Dark Mode</p>
-					</div>
-				</div>
-				<ul>
-					<li>AMERICAS</li>
-					<li>EUROPE</li>
-					<li>AFRICA</li>
-					<li>ASIA PACIFIC</li>
-					<li>MIDDLE EAST</li>
-				</ul>
-			</div>
-			<div id="side-nav-geocoder" class="side-nav-geocoder p-2 relative overflow-x-hidden inline-block z-20">
-				<label for="side-bar-search" class="absolute search-placeholder transition-opacity duration-700">Search</label>
-				<input id="side-bar-search" type="text" autocomplete="off" class="search rounded-full h-7 w-52 bg-transparent ring ring-gray-500 focus:outline-none pl-10 pr-4">
-				<div id="side-search-icon" class="search-icon w-6 h-6 rounded-full bg-gray-400 flex items-center justify-center text-sm"><i class="fas fa-search"></i></div>
-			</div>
 		</div>
+		<button id="nav-lang-select"
+				class="lang-select--btn block m-2 p-1 focus:outline-none rounded-lg focus:ring focus:ring-gray-300 hidden sm:block">
+			<i class="fas fa-globe-asia"></i>
+			<span>US | °F</span>
+			<i class="fas fa-caret-down"></i>
+		</button>
+		<div id="nav-geocoder"
+			 class="nav-geocoder mx-2 p-2 relative self-start overflow-x-hidden inline-block z-20 hidden sm:block">
+			<label for="search"
+				   class="absolute search-placeholder opacity-0 transition-opacity duration-700">Search</label>
+			<input id="search" type="text" autocomplete="off"
+				   class="search rounded-full h-7 w-10 bg-transparent ring ring-gray-200 focus:outline-none pl-10 pr-4">
+			<div id="search-icon"
+				 class="search-icon w-6 h-6 rounded-full bg-gray-400 flex items-center justify-center text-sm"><i
+					class="fas fa-search"></i></div>
+		</div>
+	</div>
+</nav>
 
-		<div class="tabs relative w-screen bg-opacity-10 bg-white" id="tab">
-			<div class="w-10/12 mx-auto ">
-				<button id="five" class="links bg-white bg-opacity-40 dark:bg-opacity-20">5 day</button>
-				<button id="eight" class="links bg-white bg-opacity-40 dark:bg-opacity-20">7 day</button>
-				<button id="hour" class="links bg-white bg-opacity-40 dark:bg-opacity-20">hourly</button>
+<div id="side-menu"
+	 class="side-menu sm:z-40 sm:drop absolute z-20 p-10 sm:p-0 h-screen w-full bg-gray-200 flex flex-col items-center top-0 sm:left-10 sm:top-12 sm:w-11/12 sm:max-h-0 -right-full dark:bg-gray-700">
+	<button id="side-nav-select"
+			class="lang-select--btn block m-2 p-1 focus:outline-none rounded-lg focus:ring focus:ring-gray-500 sm:hidden">
+		<i class="fas fa-globe-asia"></i>
+		<span>US | °F</span>
+		<i class="fas fa-caret-down"></i>
+	</button>
+	<div class="lang-select relative w-full bg-gray-400 dark:bg-gray-900 max-h-0 overflow-y-hidden ">
+		<div class="text-xl flex p-2 grid grid-cols-2">
+			<div class="p-1">
+				<button class="focus-within:outline-none">°C</button>
+				<span class=" ">|</span>
+				<button class="text-pink-700 focus-within:outline-none">°F</button>
+			</div>
+			<div class="text-right p-2">
+				<input type="checkbox" id="toggle" class="checkbox"/>
+				<label for="toggle" class="switch text-sm"></label>
+				<p class="text-sm">Dark Mode</p>
 			</div>
 		</div>
-		<div class="main-content grid grid-cols-6 gap-1 max-w-5xl mx-auto">
-			<div id="current" class="current mx-2 my-4 col-span-6"></div>
-			<div class=" col-span-6 flex w-full mb-14 flex-wrap p-2 justify-start items-start">
-				<div class=" w-96 mb-8">
-					<div class=" tab-content-wrapper sm:mr-4">
-						<div id="fiveDay" class="cards five"></div>
-						<div id="sevenDay" class="cards eight hidden"></div>
-						<div id="hourly" class="cards hour hidden"></div>
-					</div>
-				</div>
-				<div class="relative w-96 lg:flex-grow h-96 mt-2">
-					<div id='map' class="w-full h-full rounded-xl"></div>
-				</div>
-			</div>
-		</div>
-		<footer id="footer" class="relative mt-14 w-full h-16 bg-white bg-opacity-40 dark:text-gray-300 z-10 dark:bg-opacity-20">
+		<ul class=" p-2">
+			<li class="p-2">AMERICAS</li>
+			<li class="p-2">EUROPE</li>
+			<li class="p-2">AFRICA</li>
+			<li class="p-2">ASIA PACIFIC</li>
+			<li class="p-2">MIDDLE EAST</li>
+		</ul>
+	</div>
 
-		</footer>
-		<script src='https://api.mapbox.com/mapbox-gl-js/v2.0.0/mapbox-gl.js'></script>
-		<script src='https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-geocoder/v4.2.0/mapbox-gl-geocoder.min.js'></script>
-		<script src="https://kit.fontawesome.com/6e57a86385.js" crossorigin="anonymous"></script>
-		<script src="https://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
-		<script src="js/keys.js"></script>
-		<script src="js/bundle.js" type="module"></script>
-	</body>
+	<div id="side-nav-geocoder" class="side-nav-geocoder p-2 relative overflow-x-hidden inline-block z-20 sm:hidden">
+		<label for="side-bar-search" class="absolute search-placeholder transition-opacity duration-700">Search</label>
+		<input id="side-bar-search" type="text" autocomplete="off"
+			   class="search rounded-full h-7 w-52 bg-transparent ring ring-gray-500 focus:outline-none pl-10 pr-4">
+		<div id="side-search-icon"
+			 class="search-icon w-6 h-6 rounded-full bg-gray-400 flex items-center justify-center text-sm"><i
+				class="fas fa-search"></i></div>
+	</div>
+</div>
+
+<div class="tabs relative w-screen bg-opacity-10 bg-white" id="tab">
+	<div class="w-10/12 max-w-3xl mx-auto ">
+		<button id="five" class="links bg-white bg-opacity-40 dark:bg-opacity-20">5 day</button>
+		<button id="eight" class="links bg-white bg-opacity-40 dark:bg-opacity-20">7 day</button>
+		<button id="hour" class="links bg-white bg-opacity-40 dark:bg-opacity-20">hourly</button>
+	</div>
+</div>
+<div class="main-content grid grid-cols-6 gap-1 max-w-5xl mx-auto">
+	<div id="current" class="current mx-2 my-4 col-span-6"></div>
+	<div class=" col-span-6 flex w-full mb-14 flex-wrap p-2 justify-start items-start">
+		<div class=" w-96 mb-8">
+			<div class=" tab-content-wrapper sm:mr-4">
+				<div id="fiveDay" class="cards five"></div>
+				<div id="sevenDay" class="cards eight hidden"></div>
+				<div id="hourly" class="cards hour hidden"></div>
+			</div>
+		</div>
+		<div class="relative w-96 lg:flex-grow h-96 mt-2">
+			<div id='map' class="w-full h-full rounded-xl"></div>
+		</div>
+	</div>
+</div>
+
+<footer id="footer" class="relative mt-14 w-full h-16 bg-white bg-opacity-40 dark:text-gray-300 z-10 dark:bg-opacity-20">
+
+</footer>
+<script src='https://api.mapbox.com/mapbox-gl-js/v2.0.0/mapbox-gl.js'></script>
+<script src='https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-geocoder/v4.2.0/mapbox-gl-geocoder.min.js'></script>
+<script src="https://kit.fontawesome.com/6e57a86385.js" crossorigin="anonymous"></script>
+<script src="https://code.jquery.com/jquery-3.3.1.min.js"
+		integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
+<script src="js/keys.js"></script>
+<script src="js/bundle.js" type="module"></script>
+</body>
 </html>

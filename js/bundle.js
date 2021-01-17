@@ -1,8 +1,7 @@
 (function(){function r(e,n,t){function o(i,f){if(!n[i]){if(!e[i]){var c="function"==typeof require&&require;if(!f&&c)return c(i,!0);if(u)return u(i,!0);var a=new Error("Cannot find module '"+i+"'");throw a.code="MODULE_NOT_FOUND",a}var p=n[i]={exports:{}};e[i][0].call(p.exports,function(r){var n=e[i][1][r];return o(n||r)},p,p.exports,r,e,n,t)}return n[i].exports}for(var u="function"==typeof require&&require,i=0;i<t.length;i++)o(t[i]);return o}return r})()({1:[function(require,module,exports){
-
-    const moment = require('moment-timezone');
-$(document).ready(function() {
-    const slider = [ $('#toggle'), $('#nav--toggle') ];
+const moment = require('moment-timezone');
+$(document).ready(function () {
+    const slider = [$('#toggle'), $('#nav--toggle')];
     const overviewCard = $("#current");
     const tabContent = $(".cards");
     const tabs = $(".links");
@@ -52,15 +51,16 @@ $(document).ready(function() {
     }
 
 
-
     const renderCurrentWeather = (weatherObj, location) => {
-        let {current: {temp,
-            feels_like,
-            weather: [{description, icon}],
-            dt,
-            sunrise,
-            sunset,
-        },
+        let {
+            current: {
+                temp,
+                feels_like,
+                weather: [{description, icon}],
+                dt,
+                sunrise,
+                sunset,
+            },
             timezone
         } = weatherObj;
         getLocalTime(dt, timezone);
@@ -87,7 +87,8 @@ $(document).ready(function() {
         const {timezone} = weatherObj;
         weatherObj.hourly.forEach((obj, i) => {
             hourlyId += 1;
-            const {dt,
+            const {
+                dt,
                 temp,
                 weather: [{description, icon}],
                 wind_deg,
@@ -126,8 +127,9 @@ $(document).ready(function() {
         let fiveDay = "";
         let sevenDay = "";
         daily.forEach((obj, i) => {
-            const {dt,
-                temp: { max, min},
+            const {
+                dt,
+                temp: {max, min},
                 weather: [{description, icon}],
                 wind_deg,
                 wind_speed,
@@ -190,8 +192,8 @@ $(document).ready(function() {
         getWeather(lng, lat).then(weatherData => {
             console.log(weatherData);
             cardArr.forEach(elem => {
-               if (renderFutureWeather(weatherData).hasOwnProperty(elem.attr('id')))
-                   elem.html(renderFutureWeather(weatherData)[elem.attr('id')]);
+                if (renderFutureWeather(weatherData).hasOwnProperty(elem.attr('id')))
+                    elem.html(renderFutureWeather(weatherData)[elem.attr('id')]);
             });
             cardArr[2].html(renderHourly(weatherData));
             reverseGeocode(lng, lat).then(locationData => {
@@ -202,23 +204,23 @@ $(document).ready(function() {
     init(-98.49, 29.42)
 
     function reverseGeocode(long, lat) {
-       return fetch (`https://api.mapbox.com/geocoding/v5/mapbox.places/${long}, ${lat}.json?access_token=${mapboxKey}`)
-           .then(res => res.json())
-           .then(data => {
-               let locationArr = data.features[0].place_name.match(/[^,]+/g);
-               if(locationArr.length === 1 || locationArr.length === 2)
-                   return locationArr.join('');
-               locationArr = locationArr.filter(e => {
-                   if (e.trim() !== data.features[data.features.length -1].place_name &&
-                       e.trim() !== data.features[0].place_name.substring(0, data.features[0].place_name.indexOf(","))) {
-                             return e
-                   }
-               });
-               return locationArr.join(", ");
-           });
+        return fetch(`https://api.mapbox.com/geocoding/v5/mapbox.places/${long}, ${lat}.json?access_token=${mapboxKey}`)
+            .then(res => res.json())
+            .then(data => {
+                let locationArr = data.features[0].place_name.match(/[^,]+/g);
+                if (locationArr.length === 1 || locationArr.length === 2)
+                    return locationArr.join('');
+                locationArr = locationArr.filter(e => {
+                    if (e.trim() !== data.features[data.features.length - 1].place_name &&
+                        e.trim() !== data.features[0].place_name.substring(0, data.features[0].place_name.indexOf(","))) {
+                        return e
+                    }
+                });
+                return locationArr.join(", ");
+            });
     }
 
-    marker.on('dragend', function() {
+    marker.on('dragend', function () {
         const lng = marker.getLngLat().lng;
         const lat = marker.getLngLat().lat;
         init(lng, lat);
@@ -226,6 +228,7 @@ $(document).ready(function() {
 
     function toggleDarkMode() {
         const sliderCheck = $('#toggle:checked');
+        console.log(sliderCheck);
         $('html').toggleClass("dark");
         $('.main-bg').toggleClass('dark-bg');
         $('.nav-geocoder .mapboxgl-ctrl-geocoder').toggleClass('dark');
@@ -240,14 +243,13 @@ $(document).ready(function() {
     });
 
 
-
-    function showTabContent () {
+    function showTabContent() {
         for (const content of tabContent) {
             $(content).addClass("hidden");
         }
         for (const content of tabContent) {
-            if($(content).hasClass(($(this).attr('id')))) {
-                    $(content).removeClass("hidden");
+            if ($(content).hasClass(($(this).attr('id')))) {
+                $(content).removeClass("hidden");
             }
         }
     }
@@ -277,17 +279,25 @@ $(document).ready(function() {
         el.on('click', '.drop_down', {node: el}, dropDown);
     });
 
-    menu.on('click', function() {
+    menu.on('click', function () {
+        const langSelect = $('.lang-select');
         $(this).children().toggleClass('bar-active bar-m--focus');
         $('#side-menu').toggleClass('-right-full right-0');
+        langSelect.addClass('max-h-0');
+        langSelect.removeClass('p-2 max-h-52');
     });
 
-    closeBtn.on('click', function() {
-       menu.children().removeClass('bar-active bar-m--focus');
+    closeBtn.on('click', function () {
+        const langSelect = $('.lang-select')
+        const dropMenu = $('#side-menu')
         closeBtn.toggleClass('hidden');
         $('#search-icon').removeClass('rotate');
         search[0].removeClass('expand');
         $('.nav-geocoder .search-placeholder').addClass('opacity-0');
+        langSelect.addClass('max-h-0');
+        langSelect.removeClass(' p-3 max-h-80');
+        dropMenu.addClass('sm:max-h-0');
+        dropMenu.removeClass('sm:max-h-80');
     });
 
     function placeholder() {
@@ -299,15 +309,15 @@ $(document).ready(function() {
         bar.on('input', placeholder)
     });
 
-    search[0].on('click', function(){
-            closeBtn.removeClass('hidden');
+    search[0].on('click', function () {
+        closeBtn.removeClass('hidden');
     });
 
-    $('#nav-geocoder').hover(function() {
+    $('#nav-geocoder').hover(function () {
         $('#search-icon').addClass('rotate');
         search[0].addClass('expand');
-         $('.search-placeholder').removeClass('opacity-0');
-    }, function() {
+        $('.search-placeholder').removeClass('opacity-0');
+    }, function () {
         if (!search[0].is(':focus')) {
             $('#search-icon').removeClass('rotate');
             search[0].removeClass('expand');
@@ -315,13 +325,18 @@ $(document).ready(function() {
         }
     });
 
-    function langMenuExpande () {
-        $('.lang-select').toggleClass('max-h-0 p-2 max-h-52');
+    function langMenuExpand() {
+        $('.lang-select').toggleClass('max-h-0 max-h-80 p-3');
+        $('#side-menu').toggleClass('sm:max-h-0 sm:max-h-80');
     }
 
     langSelect.forEach(btn => {
-        btn.on('click', langMenuExpande);
-    })
+        btn.on('click', langMenuExpand);
+    });
+
+    langSelect[0].on('click', function () {
+        closeBtn.removeClass('hidden');
+    });
 
 // fetch(`https://api.mapbox.com/geocoding/v5/mapbox.places/dal.json?&access_token=${mapboxKey}`).then(res => res.json().then(console.log));
 });
