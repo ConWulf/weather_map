@@ -1,6 +1,7 @@
 const moment = require('moment-timezone');
+const mapboxgl = require('mapbox-gl/dist/mapbox-gl.js');
 $(document).ready(function () {
-    const slider = [$('#toggle'), $('#nav--toggle')];
+    const slider = $('#toggle');
     const overviewCard = $("#current");
     const tabContent = $(".cards");
     const tabs = $(".links");
@@ -9,6 +10,7 @@ $(document).ready(function () {
     const closeBtn = $('#close-overlay');
     const search = [$('#search'), $('#side-bar-search')]
     const langSelect = [$('#nav-lang-select'), $('#side-nav-select')];
+    const navGeocodeSearch =  $('#nav-suggestion-list');
     let hourlyId = 0;
     const mapOptions = {
         container: 'map',
@@ -207,6 +209,7 @@ $(document).ready(function () {
             .then(res => res.json())
             .then(data => {
                 let locationArr = data.features[0].place_name.match(/[^,]+/g);
+                console.log(locationArr);
                 if (locationArr.length === 1 || locationArr.length === 2)
                     return locationArr.join('');
                 locationArr = locationArr.filter(e => {
@@ -220,21 +223,52 @@ $(document).ready(function () {
     }
 
     const geocode = (input) => {
-        fetch(`https://api.mapbox.com/geocoding/v5/mapbox.places/${input}.json?&access_token=${mapboxKey}`)
-            .then(res => res.json())
-            .then(data => {
-                console.log(data);
-                data.features.forEach(feature => {
-                    const {place_name, center} = feature;
-                    $('#suggestion-list').append(`<li data-coordinate="${center}" class="suggestion">${place_name}</li>`);
-                })
-            })
+            fetch(`https://api.mapbox.com/geocoding/v5/mapbox.places/${input}.json?&access_token=${mapboxKey}`)
+                .then(res => res.json())
+                .then(data => {
+                    console.log(data);
+                    try {
+                        data.features.forEach(feature => {
+                            const {place_name, center} = feature;
+                            navGeocodeSearch.append(`<li data-coordinate="${center}" class="suggestion">${place_name}</li>`);
+                            $('#mobile-suggestion-list').append(`<li data-coordinate="${center}" class="suggestion">${place_name}</li>`);
+                        });
+                    }  catch {
+                        navGeocodeSearch.html(`<li class="p-2">No Suggestions</li>`);
+                        $('#mobile-suggestion-list').html('<li class="p-2">No Suggestions</li>');
+                    }
+                });
     }
 
-    geocode('dal');
+    navGeocodeSearch.on('click', '.suggestion', function() {
+        const lngLat = $(this).data('coordinate').split(",");
+        map.flyTo({center: lngLat});
+        init(lngLat[0], lngLat[1]);
+        marker.remove()
+        marker
+            .setLngLat(lngLat)
+            .addTo(map);
 
-    $('#suggestion-list').on('click', '.suggestion', function() {
-        console.log($(this).data('coordinate'));
+        navGeocodeSearch.addClass('hidden');
+        closeBtn.addClass('hidden');
+        $('.nav-geocoder .search-placeholder').toggleClass('hidden opacity-0');
+        search[0].removeClass('expand');
+        $('#search-icon').removeClass('rotate');
+        // $('.nav-geocoder .search-placeholder').addClass('opacity-0')
+        search.forEach(bar => {bar.val('');});
+    });
+
+    $('#mobile-suggestion-list').on('click', '.suggestion', function() {
+        const lngLat = $(this).data('coordinate').split(",");
+        map.flyTo({center: lngLat});
+        init(lngLat[0], lngLat[1]);
+        marker.remove()
+        marker
+            .setLngLat(lngLat)
+            .addTo(map);
+        $('#mobile-suggestion-list').addClass('hidden');
+        $('.side-nav-geocoder .search-placeholder').toggleClass('hidden');
+        search.forEach(bar => {bar.val('');});
     });
 
     marker.on('dragend', function () {
@@ -248,16 +282,13 @@ $(document).ready(function () {
         console.log(sliderCheck);
         $('html').toggleClass("dark");
         $('.main-bg').toggleClass('dark-bg');
-        $('.nav-geocoder .mapboxgl-ctrl-geocoder').toggleClass('dark');
         if (sliderCheck.length === 1)
             map.setStyle("mapbox://styles/mapbox/navigation-preview-night-v4");
         else
             map.setStyle("mapbox://styles/mapbox/navigation-preview-day-v4");
     }
 
-    slider.forEach(toggle => {
-        toggle.on('click', toggleDarkMode);
-    });
+    slider.on('click', toggleDarkMode);
 
 
     function showTabContent() {
@@ -302,23 +333,41 @@ $(document).ready(function () {
         $('#side-menu').toggleClass('-right-full right-0');
         langSelect.addClass('max-h-0');
         langSelect.removeClass('p-3 max-h-full');
+        $('.search-placeholder').removeClass('hidden');
         langSelect.toggleClass('-right-full right-0');
+        search.forEach(bar => {$(bar).val('')});
     });
 
     closeBtn.on('click', function () {
         const langSelect = $('.lang-select')
-        closeBtn.toggleClass('hidden');
+        const placeholder = $('.nav-geocoder .search-placeholder')
+        $(this).toggleClass('hidden');
         $('#search-icon').removeClass('rotate');
         search[0].removeClass('expand');
-        $('.nav-geocoder .search-placeholder').addClass('opacity-0');
+        search.forEach(bar => {$(bar).val('')});
+        placeholder.addClass('opacity-0');
+        placeholder.removeClass('hidden');
         langSelect.addClass('max-h-0');
         langSelect.removeClass(' p-3 max-h-full');
         $('.arrow').removeClass('transform rotate-180');
+        navGeocodeSearch.addClass('hidden');
     });
 
     function placeholder() {
+        navGeocodeSearch.html('');
         if ($(this).val().length >= 1) $('.search-placeholder').addClass('hidden');
         else $('.search-placeholder').removeClass('hidden');
+        if ($(this).val().length > 2) {
+            if ($(this).attr('id') === 'search') {
+                navGeocodeSearch.removeClass('hidden');
+                navGeocodeSearch.html('');
+            } else {
+                $('#mobile-suggestion-list').removeClass('hidden');
+                $('#mobile-suggestion-list').html('');
+            }
+            geocode($(this).val());
+        }
+        else navGeocodeSearch.html('');
     }
 
     search.forEach(bar => {
@@ -335,12 +384,12 @@ $(document).ready(function () {
     $('#nav-geocoder').hover(function () {
         $('#search-icon').addClass('rotate');
         search[0].addClass('expand');
-        $('.search-placeholder').removeClass('opacity-0');
+        $('.nav-geocoder .search-placeholder').removeClass('opacity-0');
     }, function () {
         if (!search[0].is(':focus')) {
             $('#search-icon').removeClass('rotate');
             search[0].removeClass('expand');
-            $('.search-placeholder').addClass('opacity-0');
+            $('.nav-geocoder .search-placeholder').addClass('opacity-0');
         }
     });
 
@@ -356,7 +405,5 @@ $(document).ready(function () {
     langSelect[0].on('click', function () {
         closeBtn.toggleClass('hidden');
     });
-
-
 
 });

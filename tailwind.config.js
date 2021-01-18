@@ -4,7 +4,7 @@ module.exports = {
   theme: {
     extend: {
       backgroundOpacity: ['dark'],
-      backgroundImage: theme => ({
+      backgroundImage: () => ({
         'clouds': "url(/img/pexels-eberhard-grossgasteiger-844297.jpg)"
       }),
       zIndex: {
