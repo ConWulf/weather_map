@@ -10,7 +10,7 @@ $(document).ready(function () {
     const closeBtn = $('#close-overlay');
     const search = [$('#search'), $('#side-bar-search')]
     const langSelect = [$('#nav-lang-select'), $('#side-nav-select')];
-    const navGeocodeSearch =  $('#nav-suggestion-list');
+    const suggestionLists =  [$('#nav-suggestion-list'), $('#mobile-suggestion-list')];
     let hourlyId = 0;
     const mapOptions = {
         container: 'map',
@@ -230,17 +230,17 @@ $(document).ready(function () {
                     try {
                         data.features.forEach(feature => {
                             const {place_name, center} = feature;
-                            navGeocodeSearch.append(`<li data-coordinate="${center}" class="suggestion">${place_name}</li>`);
-                            $('#mobile-suggestion-list').append(`<li data-coordinate="${center}" class="suggestion">${place_name}</li>`);
+                            suggestionLists[0].append(`<li data-coordinate="${center}" class="suggestion">${place_name}</li>`);
+                            suggestionLists[1].append(`<li data-coordinate="${center}" class="suggestion">${place_name}</li>`);
                         });
                     }  catch {
-                        navGeocodeSearch.html(`<li class="p-2">No Suggestions</li>`);
-                        $('#mobile-suggestion-list').html('<li class="p-2">No Suggestions</li>');
+                        suggestionLists[0].html(`<li class="p-2">No Suggestions</li>`);
+                        suggestionLists[1].html('<li class="p-2">No Suggestions</li>');
                     }
                 });
     }
 
-    navGeocodeSearch.on('click', '.suggestion', function() {
+    function selectLocation() {
         const lngLat = $(this).data('coordinate').split(",");
         map.flyTo({center: lngLat});
         init(lngLat[0], lngLat[1]);
@@ -248,28 +248,24 @@ $(document).ready(function () {
         marker
             .setLngLat(lngLat)
             .addTo(map);
-
-        navGeocodeSearch.addClass('hidden');
-        closeBtn.addClass('hidden');
-        $('.nav-geocoder .search-placeholder').toggleClass('hidden opacity-0');
-        search[0].removeClass('expand');
-        $('#search-icon').removeClass('rotate');
-        // $('.nav-geocoder .search-placeholder').addClass('opacity-0')
         search.forEach(bar => {bar.val('');});
-    });
+        suggestionLists.forEach(v => {
+            if(v.attr('id') === 'nav-suggestion-list') {
+                v.addClass('hidden');
+                closeBtn.addClass('hidden');
+                $('.nav-geocoder .search-placeholder').toggleClass('hidden opacity-0');
+                search[0].removeClass('expand');
+                $('#search-icon').removeClass('rotate');
+            } else {
+                v.addClass('hidden');
+                $('.side-nav-geocoder .search-placeholder').toggleClass('hidden');
+            }
+        })
+    }
 
-    $('#mobile-suggestion-list').on('click', '.suggestion', function() {
-        const lngLat = $(this).data('coordinate').split(",");
-        map.flyTo({center: lngLat});
-        init(lngLat[0], lngLat[1]);
-        marker.remove()
-        marker
-            .setLngLat(lngLat)
-            .addTo(map);
-        $('#mobile-suggestion-list').addClass('hidden');
-        $('.side-nav-geocoder .search-placeholder').toggleClass('hidden');
-        search.forEach(bar => {bar.val('');});
-    });
+    suggestionLists.forEach(list => {
+        list.on('click', '.suggestion', selectLocation);
+    })
 
     marker.on('dragend', function () {
         const lng = marker.getLngLat().lng;
@@ -350,24 +346,24 @@ $(document).ready(function () {
         langSelect.addClass('max-h-0');
         langSelect.removeClass(' p-3 max-h-full');
         $('.arrow').removeClass('transform rotate-180');
-        navGeocodeSearch.addClass('hidden');
+        suggestionLists[0].addClass('hidden');
     });
 
     function placeholder() {
-        navGeocodeSearch.html('');
+        suggestionLists[0].html('');
         if ($(this).val().length >= 1) $('.search-placeholder').addClass('hidden');
         else $('.search-placeholder').removeClass('hidden');
         if ($(this).val().length > 2) {
             if ($(this).attr('id') === 'search') {
-                navGeocodeSearch.removeClass('hidden');
-                navGeocodeSearch.html('');
+                suggestionLists[0].removeClass('hidden');
+                suggestionLists[0].html('');
             } else {
-                $('#mobile-suggestion-list').removeClass('hidden');
-                $('#mobile-suggestion-list').html('');
+                suggestionLists[1].removeClass('hidden');
+                suggestionLists[1].html('');
             }
             geocode($(this).val());
         }
-        else navGeocodeSearch.html('');
+        else suggestionLists[0].html('');
     }
 
     search.forEach(bar => {
