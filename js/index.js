@@ -11,6 +11,7 @@ $(document).ready(function () {
     const search = [$('#search'), $('#side-bar-search')]
     const langSelect = [$('#nav-lang-select'), $('#side-nav-select')];
     const suggestionLists =  [$('#nav-suggestion-list'), $('#mobile-suggestion-list')];
+    const langArray = ["AMERICAS", "EUROPE", "AFRICA", "ASIA PACIFIC", "MIDDLE EAST"]
     let hourlyId = 0;
     const mapOptions = {
         container: 'map',
@@ -122,6 +123,18 @@ $(document).ready(function () {
         });
         return html;
     }
+
+    const renderLangHtml = () => {
+        let html = '';
+        langArray.forEach(language => {
+            html +=  `<li class="p-2 flex justify-between items-center">
+                    ${language}
+                    <i class="fas fa-chevron-down mr-3"></i>
+                </li>`
+        });
+        return html;
+    }
+    $("#lang-list").html(renderLangHtml());
 
     const renderFutureWeather = (weatherObj) => {
         const {daily, timezone} = weatherObj;
@@ -300,9 +313,9 @@ $(document).ready(function () {
 
     function focusTab() {
         for (const tab of tabs) {
-            $(tab).removeClass('clicked');
+            $(tab).removeClass('active');
         }
-        $(this).addClass('clicked');
+        $(this).addClass('active');
     }
 
     tabs.on('click', showTabContent);
@@ -344,7 +357,7 @@ $(document).ready(function () {
         placeholder.addClass('opacity-0');
         placeholder.removeClass('hidden');
         langSelect.addClass('max-h-0');
-        langSelect.removeClass(' p-3 max-h-full');
+        langSelect.removeClass(' p-3 max-h-screen');
         $('.arrow').removeClass('transform rotate-180');
         suggestionLists[0].addClass('hidden');
     });
@@ -390,7 +403,7 @@ $(document).ready(function () {
     });
 
     function langMenuExpand() {
-        $('.lang-select').toggleClass('max-h-0 max-h-full p-3');
+        $('.lang-select').toggleClass('max-h-0 max-h-screen');
         $('.arrow').toggleClass('transform rotate-180');
     }
 
@@ -399,7 +412,9 @@ $(document).ready(function () {
     });
 
     langSelect[0].on('click', function () {
-        closeBtn.toggleClass('hidden');
+        if (closeBtn.hasClass('hidden'))
+            closeBtn.removeClass('hidden');
+        else closeBtn.addClass('hidden');
     });
 
 });

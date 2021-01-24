@@ -40,29 +40,37 @@ body {
 }
 
 .tabs button {
-    transition: background-color 400ms ease-in-out;
-    @apply float-left outline-none cursor-pointer px-4 py-1
+    @apply float-left outline-none cursor-pointer py-1 relative
 }
 
 .tabs button:hover {
-    @apply bg-opacity-10
+    @apply text-green-600
 }
 
-.tabs button.clicked {
-    @apply bg-opacity-0 ring-2 ring-inset ring-blue-600
+.tabs button.active {
+    @apply border-b border-blue-500 text-green-600;
 }
 
-
-.tabs button:nth-child(2) {
-    @apply border-l border-r
+#eight {
+    @apply py-1 px-0 mx-5
 }
 
-.tabs button:nth-child(3) {
-    @apply border-r
+#eight::before {
+    content: "";
+    color: #000;
+    position: relative;
+    left: -10px;
+    border-left: 1px solid black;
+    height: 1rem;
 }
 
-.tabs button:nth-child(2) {
-    @apply border-l
+#eight::after {
+    content: "";
+    color: #000;
+    position: relative;
+    right: -10px;
+    border-left: 1px solid black;
+    height: 1rem;
 }
 
 .tab-content-wrapper::-webkit-scrollbar {
