@@ -189,12 +189,18 @@ footer {
     @apply inline-block h-1 w-full bg-gray-900 relative rounded dark:bg-gray-300
 }
 
+.bar.scrolled,
+.bar.scrolled::before,
+.bar.scrolled::after{
+    @apply bg-gray-300
+}
+
 .bar.bar-m--focus {
     @apply bg-opacity-0
 }
 
 .nav {
-    transition: max-height 400ms linear, background-color 600ms ease-in-out;
+    transition: max-height 400ms linear, background-color 400ms ease-in-out;
     @apply relative w-full z-30 dark:bg-opacity-20
 }
 
@@ -252,7 +258,3 @@ footer {
 }
 
 @tailwind utilities;
-
-@layer components {
-
-}

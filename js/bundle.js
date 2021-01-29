@@ -14,6 +14,8 @@ $(document).ready(function () {
     const suggestionLists =  [$('#nav-suggestion-list'), $('#mobile-suggestion-list')];
     const langArray = ["AMERICAS", "EUROPE", "AFRICA", "ASIA PACIFIC", "MIDDLE EAST"]
     let hourlyId = 0;
+    let top = $(window).scrollTop();
+    let geocodeClicked = false;
     const mapOptions = {
         container: 'map',
         center: [-98.49, 29.42], // starting position [lng, lat]
@@ -27,7 +29,6 @@ $(document).ready(function () {
     const marker = new mapboxgl.Marker({draggable: true})
         .setLngLat([-98.49, 29.42])
         .addTo(map);
-
     const convertTime = (time) => {
         let hours = parseInt(time.substr(0, time.indexOf(':')))
         if (hours === 0) return time;
@@ -37,9 +38,20 @@ $(document).ready(function () {
         } else return time;
     }
 
+    $(window).scroll( function () {
+        if ($(this).scrollTop() > 0) {
+            $("#nav").addClass("fixed bg-black bg-opacity-70 text-gray-300 dark:bg-opacity-90");
+            $(".bar").addClass("scrolled");
+
+        } else {
+            $(".bar").removeClass("scrolled");
+            $("#nav").removeClass("fixed bg-black bg-opacity-70 text-gray-300 dark:bg-opacity-90");
+        }
+    })
+
     const getLocalTime = (unix, tz) => {
         const milliseconds = unix * 1000;
-        const date = moment.tz(milliseconds, tz).format('DD ddd ');
+        const date = moment.tz(milliseconds, tz).format('dddd DD');
         let exactTime = moment.tz(milliseconds, tz).format('LTS z');
         const id = moment.tz(milliseconds, tz).format('DD');
         let time = moment.tz(milliseconds, tz).format('HH:mm');
@@ -100,6 +112,9 @@ $(document).ready(function () {
                 humidity
             } = obj;
             if (i > 0) {
+                if (getLocalTime(dt, timezone).time === "00:00") {
+                    html += `<span>${getLocalTime(dt, timezone).date}</span>`
+                }
                 html += `<div class="cards-content">
                         <div class="text-sm">
                         <div class="self-center">${getLocalTime(dt, timezone).time}</div>
@@ -289,7 +304,6 @@ $(document).ready(function () {
 
     function toggleDarkMode() {
         const sliderCheck = $('#toggle:checked');
-        console.log(sliderCheck);
         $('html').toggleClass("dark");
         $('.main-bg').toggleClass('dark-bg');
         if (sliderCheck.length === 1)
@@ -361,6 +375,7 @@ $(document).ready(function () {
         langSelect.removeClass(' p-3 max-h-screen');
         $('.arrow').removeClass('transform rotate-180');
         suggestionLists[0].addClass('hidden');
+        geocodeClicked = false;
     });
 
     function placeholder() {
@@ -385,6 +400,7 @@ $(document).ready(function () {
     });
 
     search[0].on('click', function () {
+        geocodeClicked = true;
         const langSelect = $('.lang-select');
         langSelect.addClass('max-h-0');
         langSelect.removeClass(' p-3 max-h-full');
@@ -413,9 +429,7 @@ $(document).ready(function () {
     });
 
     langSelect[0].on('click', function () {
-        if (closeBtn.hasClass('hidden'))
-            closeBtn.removeClass('hidden');
-        else closeBtn.addClass('hidden');
+        if (!geocodeClicked) closeBtn.toggleClass('hidden');
     });
 
 });

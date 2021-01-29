@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="en" class="w-screen h-screen overflow-x-hidden">
+<html lang="en" class="w-screen overflow-x-hidden">
 <head>
 	<meta charset="UTF-8">
 	<meta name="viewport"
@@ -9,10 +9,10 @@
 	<link rel="stylesheet" href="build/style.css">
 	<title>Weather map</title>
 </head>
-<body class="w-screen h-screen overflow-x-hidden dark:text-gray-200">
+<body class="w-screen overflow-x-hidden dark:text-gray-200">
 <div id="close-overlay" class="w-full h-full absolute bg-black bg-opacity-10 z-30 hidden"></div>
 
-<div class="main-bg absolute w-full h-full -z-10"></div>
+<div class="main-bg fixed w-full h-full -z-10"></div>
 
 <nav id="nav" class="nav">
 	<div class="flex justify-between items-center max-w-3xl mx-auto">
@@ -60,7 +60,7 @@
 </nav>
 
 <div id="side-menu"
-	 class="side-menu sm:drop absolute z-20 px-10 py-12 sm:p-0 h-full w-full bg-gray-200 flex flex-col items-center top-0 -right-full dark:bg-gray-700 sm:hidden">
+	 class="side-menu sm:drop fixed z-20 px-10 py-12 sm:p-0 h-full w-full bg-gray-200 flex flex-col items-center top-0 -right-full dark:bg-gray-700 sm:hidden">
 	<div id="side-nav-geocoder" class="side-nav-geocoder p-2 relative overflow-x-hidden inline-block z-20 sm:hidden">
 		<label for="side-bar-search" class="absolute search-placeholder transition-opacity duration-700 cursor-text">Search</label>
 		<input id="side-bar-search" type="text" autocomplete="off"
@@ -104,9 +104,6 @@
 	</div>
 </div>
 
-<footer id="footer" class="relative mt-14 w-full h-24 bg-white bg-opacity-40 dark:text-gray-300 z-10 dark:bg-opacity-20">
-
-</footer>
 <script src="https://kit.fontawesome.com/6e57a86385.js" crossorigin="anonymous"></script>
 <script src="https://code.jquery.com/jquery-3.3.1.min.js"
 		integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
