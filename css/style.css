@@ -256,5 +256,11 @@ footer {
 .suggestion:hover {
     @apply bg-blue-300 dark:bg-blue-700
 }
-
+::-webkit-scrollbar {
+    background-color: rgba(50, 130, 230, 0.2);
+    @apply w-2
+}
+::-webkit-scrollbar-thumb {
+    @apply bg-green-500
+}
 @tailwind utilities;
