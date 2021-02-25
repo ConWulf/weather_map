@@ -11,10 +11,8 @@ $(document).ready(function () {
     const closeBtn = $('#close-overlay');
     const search = [$('#search'), $('#side-bar-search')]
     const langSelect = [$('#nav-lang-select'), $('#side-nav-select')];
-    const suggestionLists =  [$('#nav-suggestion-list'), $('#mobile-suggestion-list')];
-    const langArray = ["AMERICAS", "EUROPE", "AFRICA", "ASIA PACIFIC", "MIDDLE EAST"]
+    const suggestionLists = [$('#nav-suggestion-list'), $('#mobile-suggestion-list')];
     let hourlyId = 0;
-    let top = $(window).scrollTop();
     let geocodeClicked = false;
     const mapOptions = {
         container: 'map',
@@ -38,7 +36,7 @@ $(document).ready(function () {
         } else return time;
     }
 
-    $(window).scroll( function () {
+    $(window).scroll(function () {
         if ($(this).scrollTop() > 0) {
             $("#nav").addClass("fixed bg-black bg-opacity-70 text-gray-300 dark:bg-opacity-90");
             $(".bar").addClass("scrolled");
@@ -140,18 +138,6 @@ $(document).ready(function () {
         return html;
     }
 
-    const renderLangHtml = () => {
-        let html = '';
-        langArray.forEach(language => {
-            html +=  `<li class="p-2 flex justify-between items-center">
-                    ${language}
-                    <i class="fas fa-chevron-down mr-3"></i>
-                </li>`
-        });
-        return html;
-    }
-    $("#lang-list").html(renderLangHtml());
-
     const renderFutureWeather = (weatherObj) => {
         const {daily, timezone} = weatherObj;
         let fiveDay = "";
@@ -252,21 +238,21 @@ $(document).ready(function () {
     }
 
     const geocode = (input) => {
-            fetch(`https://api.mapbox.com/geocoding/v5/mapbox.places/${input}.json?&access_token=${mapboxKey}`)
-                .then(res => res.json())
-                .then(data => {
-                    console.log(data);
-                    try {
-                        data.features.forEach(feature => {
-                            const {place_name, center} = feature;
-                            suggestionLists[0].append(`<li data-coordinate="${center}" class="suggestion">${place_name}</li>`);
-                            suggestionLists[1].append(`<li data-coordinate="${center}" class="suggestion">${place_name}</li>`);
-                        });
-                    }  catch {
-                        suggestionLists[0].html(`<li class="p-2">No Suggestions</li>`);
-                        suggestionLists[1].html('<li class="p-2">No Suggestions</li>');
-                    }
-                });
+        fetch(`https://api.mapbox.com/geocoding/v5/mapbox.places/${input}.json?&access_token=${mapboxKey}`)
+            .then(res => res.json())
+            .then(data => {
+                console.log(data);
+                try {
+                    data.features.forEach(feature => {
+                        const {place_name, center} = feature;
+                        suggestionLists[0].append(`<li data-coordinate="${center}" class="suggestion">${place_name}</li>`);
+                        suggestionLists[1].append(`<li data-coordinate="${center}" class="suggestion">${place_name}</li>`);
+                    });
+                } catch {
+                    suggestionLists[0].html(`<li class="p-2">No Suggestions</li>`);
+                    suggestionLists[1].html('<li class="p-2">No Suggestions</li>');
+                }
+            });
     }
 
     function selectLocation() {
@@ -277,9 +263,11 @@ $(document).ready(function () {
         marker
             .setLngLat(lngLat)
             .addTo(map);
-        search.forEach(bar => {bar.val('');});
+        search.forEach(bar => {
+            bar.val('');
+        });
         suggestionLists.forEach(v => {
-            if(v.attr('id') === 'nav-suggestion-list') {
+            if (v.attr('id') === 'nav-suggestion-list') {
                 v.addClass('hidden');
                 closeBtn.addClass('hidden');
                 $('.nav-geocoder .search-placeholder').toggleClass('hidden opacity-0');
@@ -358,8 +346,10 @@ $(document).ready(function () {
         langSelect.addClass('max-h-0');
         langSelect.removeClass('p-3 max-h-full');
         $('.search-placeholder').removeClass('hidden');
-        langSelect.toggleClass('-right-full right-0');
-        search.forEach(bar => {$(bar).val('')});
+        langSelect.toggleClass('-right-full right-1/4');
+        search.forEach(bar => {
+            $(bar).val('')
+        });
     });
 
     closeBtn.on('click', function () {
@@ -368,7 +358,9 @@ $(document).ready(function () {
         $(this).toggleClass('hidden');
         $('#search-icon').removeClass('rotate');
         search[0].removeClass('expand');
-        search.forEach(bar => {$(bar).val('')});
+        search.forEach(bar => {
+            $(bar).val('')
+        });
         placeholder.addClass('opacity-0');
         placeholder.removeClass('hidden');
         langSelect.addClass('max-h-0');
@@ -391,8 +383,7 @@ $(document).ready(function () {
                 suggestionLists[1].html('');
             }
             geocode($(this).val());
-        }
-        else suggestionLists[0].html('');
+        } else suggestionLists[0].html('');
     }
 
     search.forEach(bar => {
