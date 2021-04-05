@@ -12,6 +12,7 @@
   "dependencies": {
     "autoprefixer": "^10.1.0",
     "mapbox-gl": "^2.0.1",
+    "moment": "^2.29.1",
     "moment-timezone": "^0.5.32",
     "postcss-cli": "^8.3.1",
     "tailwindcss": "^2.0.2"
